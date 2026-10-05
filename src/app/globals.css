@@ -81,3 +81,13 @@ details.faq-item[open] .faq-icon {
     scroll-behavior: auto;
   }
 }
+
+/* Showcase mode: all layouts are rendered, only the active one is shown. */
+[data-sc-variant]:not([data-active]) {
+  display: none;
+}
+/* Navbar/footer wrappers must not create a box, or the sticky navbar would stop sticking. */
+[data-sc-frame],
+[data-sc-frame] > [data-sc-variant][data-active] {
+  display: contents;
+}

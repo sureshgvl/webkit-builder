@@ -28,6 +28,7 @@ function LangSwitch({ ctx }: { ctx: SectionCtx }) {
           key={l}
           href={ctx.langHref(l)}
           lang={l}
+          data-lang-link=""
           aria-current={l === ctx.lang ? "true" : undefined}
           className={`rounded-btn px-2.5 py-1 ${l === ctx.lang ? "bg-primary text-primary-fg" : "hover:bg-surface"}`}
         >

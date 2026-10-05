@@ -78,6 +78,17 @@ export function parseSite(slug: string, raw: unknown, file = `clients/${slug}/si
   if (!baseStyle) fail(file, `Unknown style "${config.style}". Available: ${Object.keys(STYLES).join(", ")}`);
   const style: SiteStyle = { ...baseStyle, colors: { ...baseStyle.colors, ...config.colors } };
 
+  for (const look of preset.looks) {
+    if (!STYLES[look.style]) fail(file, `Preset "${preset.id}" look "${look.id}" uses unknown style "${look.style}".`);
+    for (const [id, layout] of Object.entries(look.layouts)) {
+      const type = (preset.sections[id]?.type as string | undefined) ?? id;
+      const def = id === "navbar" || id === "footer" ? FRAME[id] : SECTIONS[type];
+      if (!def?.layouts[layout]) {
+        fail(file, `Preset "${preset.id}" look "${look.id}": section "${id}" has no layout "${layout}".`);
+      }
+    }
+  }
+
   const order = config.order ?? preset.order;
   const client = config.sections ?? {};
   const warnings: string[] = [];

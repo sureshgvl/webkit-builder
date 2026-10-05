@@ -7,6 +7,62 @@ export const travel: Preset = {
   defaultStyle: "warm",
   schemaType: "TravelAgency",
   mustReplace: ["testimonials", "stats"],
+  looks: [
+    {
+      id: "adventure",
+      name: { mr: "साहस", en: "Adventure" },
+      style: "warm",
+      layouts: {
+        navbar: "simple", hero: "image", packages: "cards", features: "grid", stats: "band", gallery: "masonry",
+        testimonials: "cards", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
+      },
+    },
+    {
+      id: "boutique",
+      name: { mr: "बुटीक", en: "Boutique" },
+      style: "elegant",
+      layouts: {
+        navbar: "centered", hero: "split", packages: "list", features: "split", stats: "cards", gallery: "grid",
+        testimonials: "scroll", faq: "two-column", cta: "strip", enquiry: "simple", contact: "details", footer: "simple",
+      },
+    },
+    {
+      id: "fresh",
+      name: { mr: "फ्रेश", en: "Fresh" },
+      style: "modern",
+      layouts: {
+        navbar: "simple", hero: "centered", packages: "cards", features: "grid", stats: "cards", gallery: "grid",
+        testimonials: "scroll", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
+      },
+    },
+    {
+      id: "coastal",
+      name: { mr: "किनारा", en: "Coastal" },
+      style: "modern",
+      layouts: {
+        navbar: "centered", hero: "image", packages: "list", features: "split", stats: "band", gallery: "masonry",
+        testimonials: "cards", faq: "two-column", cta: "strip", enquiry: "simple", contact: "map", footer: "simple",
+      },
+    },
+    {
+      id: "heritage",
+      name: { mr: "वारसा", en: "Heritage" },
+      style: "elegant",
+      layouts: {
+        navbar: "simple", hero: "image", packages: "cards", features: "grid", stats: "band", gallery: "masonry",
+        testimonials: "cards", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
+      },
+    },
+    {
+      id: "family",
+      name: { mr: "कुटुंब", en: "Family" },
+      style: "warm",
+      layouts: {
+        navbar: "centered", hero: "split", packages: "cards", features: "split", stats: "cards", gallery: "grid",
+        testimonials: "scroll", faq: "accordion", cta: "strip", enquiry: "simple", contact: "details", footer: "columns",
+      },
+    },
+  ],
   order: ["hero", "packages", "features", "stats", "gallery", "testimonials", "faq", "cta", "enquiry", "contact"],
   sections: {
     navbar: { layout: "simple" },

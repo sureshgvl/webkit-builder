@@ -11,7 +11,8 @@
     "new-client": "tsx scripts/new-client.ts",
     "validate": "tsx scripts/validate.ts",
     "lint": "tsc --noEmit",
-    "screenshots": "node scripts/screenshot.mjs"
+    "screenshots": "node scripts/screenshot.mjs",
+    "test:showcase": "node scripts/test-showcase.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.52.0",

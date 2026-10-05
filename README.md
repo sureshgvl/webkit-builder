@@ -77,7 +77,7 @@ A client can keep a style but use its own brand colours:
 
 | Industry | Default style | Sections |
 |---|---|---|
-| `travel` | `warm` | hero, packages, features, stats, gallery, testimonials, faq, cta, enquiry, contact |
+| `travel` | `warm` | hero, packages, features, stats, gallery, testimonials, faq, cta, enquiry, contact — 6 ready looks |
 
 ## Client config reference
 
@@ -125,6 +125,25 @@ One Vercel project per client, all from this repo:
 
 Every push to `main` redeploys every client project, so kit improvements reach all sites at once.
 
+## Showcase demo (for selling)
+
+Add `"showcase": true` to a client config (the `demo-travel` site has it) and the page gets a
+**🎨 Customize / डिझाइन बदला** button. Visitors can:
+
+- pick a **ready look** (a style + layout combination defined in the preset's `looks`),
+- switch **style** and try their own **brand colour**,
+- change the **layout of each section**,
+- **copy a link** to that exact design (e.g. `/?style=elegant&color=1d4ed8&hero=split`) to send to a client,
+- **copy the setup** as `site.json` (style, colour and every section's layout) to start the client's site.
+
+Everything switches instantly: in showcase mode all layouts are rendered into the static page and only the
+active one is shown. Normal client sites (without `showcase`) are unaffected. The language switch keeps the design.
+
+Live demo: https://webkit-builder.vercel.app
+
+To add looks for an industry, edit `looks` in its preset (`src/presets/<industry>.ts`). The build checks that every
+look uses a real style and real layouts.
+
 ## What every site gets
 
 - Static HTML (fast, cheap, nothing to hack), mobile-first layout, no sideways scrolling
@@ -141,9 +160,11 @@ Every push to `main` redeploys every client project, so kit improvements reach a
 npm run lint          # TypeScript
 npm run validate      # all client configs
 npm run build && npm run screenshots   # phone + desktop screenshots of the built site, fails on sideways scroll or JS errors
+CLIENT=demo-travel npm run build && npm run test:showcase   # clicks through the showcase panel in a real browser
 ```
 
-CI (`.github/workflows/ci.yml`) runs the type check, validation and a build of every demo client on each push.
+CI (`.github/workflows/ci.yml`) runs on each push: type check, config validation, a build of every demo client, and
+browser tests (showcase panel + screenshots). Screenshots are attached to each CI run as an artifact.
 
 ## Adding things
 
@@ -162,4 +183,5 @@ CI (`.github/workflows/ci.yml`) runs the type check, validation and a build of e
 | 2. First industry | Travel preset (mr + en), 13 sections, SEO | ✅ |
 | 3. More industries | Next industries + 3 more styles, added as clients ask | ⬜ |
 | 4. Delivery tools | Deploy helper, image resizing for client photos, privacy page | ⬜ |
-| 5. Demo site + tests | Showcase site (pick industry × style live), screenshot tests in CI, Lighthouse | ⬜ |
+| 5. Demo site + tests | Showcase panel (looks, styles, brand colour, layouts, share link, copy setup), browser tests + screenshots in CI | ✅ |
+| 5b. | Lighthouse scores in CI; industry switcher once there are more industries | ⬜ |

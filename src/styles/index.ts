@@ -28,7 +28,13 @@ export function styleVars(style: SiteStyle): string {
   ].join(";");
 }
 
-export function googleFontsHref(style: SiteStyle): string {
-  const families = style.fonts.google.map((f) => `family=${f}`).join("&");
+/** One Google Fonts stylesheet for the given styles (duplicate families keep the version with most weights). */
+export function googleFontsHref(...styles: SiteStyle[]): string {
+  const byFamily = new Map<string, string>();
+  for (const f of styles.flatMap((s) => s.fonts.google)) {
+    const name = f.split(":")[0];
+    if ((byFamily.get(name)?.length ?? 0) < f.length) byFamily.set(name, f);
+  }
+  const families = [...byFamily.values()].map((f) => `family=${f}`).join("&");
   return `https://fonts.googleapis.com/css2?${families}&display=swap`;
 }

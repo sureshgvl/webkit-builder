@@ -1,3 +1,14 @@
+import type { Localized } from "@/lib/i18n";
+
+/** A ready-made combination of style + section layouts, offered in the showcase panel. */
+export type Look = {
+  id: string;
+  name: Localized;
+  style: string;
+  /** Section id → layout. Sections left out keep the preset's layout. */
+  layouts: Record<string, string>;
+};
+
 export type Preset = {
   id: string;
   label: string;
@@ -12,6 +23,8 @@ export type Preset = {
   mustReplace: string[];
   /** Section ids in page order. */
   order: string[];
+  /** Ready-made looks for the showcase panel (first one should match the preset defaults). */
+  looks: Look[];
   /** Default content per section id (plus "navbar" / "footer"). Client config overrides it key by key. */
   sections: Record<string, Record<string, unknown>>;
 };

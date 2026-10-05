@@ -26,7 +26,8 @@ export type SectionCtx = {
   nav: NavLink[];
 };
 
-export type SectionProps<D> = { id: string; data: D; ctx: SectionCtx };
+/** `id` is the anchor for nav links; it is omitted when a showcase wrapper carries it instead. */
+export type SectionProps<D> = { id?: string; data: D; ctx: SectionCtx };
 
 export type SectionDef<S extends z.ZodType = z.ZodType> = {
   type: string;

@@ -18,7 +18,7 @@ export function Section({
   className = "",
   children,
 }: {
-  id: string;
+  id?: string;
   tone?: Tone;
   className?: string;
   children: ReactNode;

@@ -8,3 +8,4 @@ next-env.d.ts
 # generated per build from clients/<slug>/images
 public/client/
 src/generated/
+screenshots/

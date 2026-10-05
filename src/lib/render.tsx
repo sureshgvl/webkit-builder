@@ -1,8 +1,10 @@
 import { FloatingActions } from "@/components/floating-actions";
+import { ShowcasePanel, type ShowcaseData } from "@/components/showcase-panel";
 import { FRAME, SECTIONS } from "@/sections";
-import type { SectionCtx } from "@/sections/types";
+import type { SectionCtx, SectionDef } from "@/sections/types";
+import { STYLES, styleVars } from "@/styles";
 import { translate, UI, type Lang } from "./i18n";
-import type { ResolvedSite } from "./site";
+import type { ResolvedSection, ResolvedSite } from "./site";
 
 export function digits(phone: string): string {
   const d = phone.replace(/\D/g, "");
@@ -43,24 +45,82 @@ export function buildCtx(site: ResolvedSite, lang: Lang): SectionCtx {
   };
 }
 
+/**
+ * Renders one section. In showcase mode every layout is rendered and only the active one is shown
+ * (`[data-sc-variant]` rules in globals.css), so the panel can switch layouts instantly in a static site.
+ */
+function SectionBlock({
+  def,
+  section,
+  ctx,
+  showcase,
+  frame = false,
+}: {
+  def: SectionDef;
+  section: ResolvedSection;
+  ctx: SectionCtx;
+  showcase: boolean;
+  frame?: boolean;
+}) {
+  if (!showcase) {
+    const Layout = def.layouts[section.layout];
+    return <Layout id={frame ? undefined : section.id} data={section.data} ctx={ctx} />;
+  }
+  return (
+    <div id={frame ? undefined : section.id} data-sc-section={section.id} {...(frame ? { "data-sc-frame": "" } : {})}>
+      {Object.entries(def.layouts).map(([name, Layout]) => (
+        <div key={name} data-sc-variant={name} {...(name === section.layout ? { "data-active": "" } : {})}>
+          <Layout data={section.data} ctx={ctx} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function showcaseData(site: ResolvedSite, ctx: SectionCtx): ShowcaseData {
+  const all = [site.navbar, ...site.sections, site.footer];
+  return {
+    lang: ctx.lang,
+    style: site.config.style,
+    primary: site.style.colors.primary,
+    styles: Object.values(STYLES).map((base) => {
+      // The site's own style keeps any brand colours from its config.
+      const st = base.id === site.style.id ? site.style : base;
+      return { id: st.id, label: st.label, vars: styleVars(st), swatch: [st.colors.primary, st.colors.accent, st.colors.surface] };
+    }),
+    sections: all.map((s) => ({
+      id: s.id,
+      type: s.type,
+      layout: s.layout,
+      layouts: Object.keys((s.id === "navbar" || s.id === "footer" ? FRAME[s.id] : SECTIONS[s.type]).layouts),
+    })),
+    looks: site.preset.looks.map((l) => ({
+      id: l.id,
+      name: translate(l.name, ctx.lang),
+      style: l.style,
+      layouts: l.layouts,
+      swatch: [STYLES[l.style].colors.primary, STYLES[l.style].colors.accent, STYLES[l.style].colors.surface],
+    })),
+  };
+}
+
 export function SitePage({ site, lang }: { site: ResolvedSite; lang: Lang }) {
   const ctx = buildCtx(site, lang);
-  const Navbar = FRAME.navbar.layouts[site.navbar.layout];
-  const Footer = FRAME.footer.layouts[site.footer.layout];
+  const showcase = Boolean(site.config.showcase);
   return (
     <div lang={lang} className="pb-16 sm:pb-0">
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-bg focus:p-3">
         Skip to content
       </a>
-      <Navbar id="top" data={site.navbar.data} ctx={ctx} />
+      <SectionBlock def={FRAME.navbar} section={site.navbar} ctx={ctx} showcase={showcase} frame />
       <main id="main">
-        {site.sections.map((s) => {
-          const Layout = SECTIONS[s.type].layouts[s.layout];
-          return <Layout key={s.id} id={s.id} data={s.data} ctx={ctx} />;
-        })}
+        {site.sections.map((s) => (
+          <SectionBlock key={s.id} def={SECTIONS[s.type]} section={s} ctx={ctx} showcase={showcase} />
+        ))}
       </main>
-      <Footer id="footer" data={site.footer.data} ctx={ctx} />
+      <SectionBlock def={FRAME.footer} section={site.footer} ctx={ctx} showcase={showcase} frame />
       <FloatingActions ctx={ctx} />
+      {showcase && <ShowcasePanel data={showcaseData(site, ctx)} />}
     </div>
   );
 }

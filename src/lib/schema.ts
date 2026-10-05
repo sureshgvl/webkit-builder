@@ -88,6 +88,8 @@ export const siteSchema = z
       .strict()
       .optional(),
     analytics: z.object({ ga4: z.string().regex(/^G-[A-Z0-9]+$/).optional() }).strict().optional(),
+    /** Sales demo: adds a "Customize" panel so visitors can switch looks, styles and layouts live. */
+    showcase: z.boolean().optional(),
   })
   .strict();
 

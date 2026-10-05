@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { translate } from "@/lib/i18n";
 import { imageUrl } from "@/lib/render";
 import { loadSite, type ResolvedSite } from "@/lib/site";
-import { googleFontsHref, styleVars } from "@/styles";
+import { googleFontsHref, STYLES, styleVars } from "@/styles";
 import "./globals.css";
 
 /** Client logo, or a generated letter icon in the brand colour. */
@@ -24,7 +24,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link rel="stylesheet" href={googleFontsHref(site.style)} />
+        <link
+          rel="stylesheet"
+          href={site.config.showcase ? googleFontsHref(...Object.values(STYLES)) : googleFontsHref(site.style)}
+        />
         <link rel="icon" href={faviconHref(site)} />
         <meta name="theme-color" content={site.style.colors.primary} />
         <style>{`:root{${styleVars(site.style)}}`}</style>
