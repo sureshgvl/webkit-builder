@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.env*
+.vercel
+# generated per build from clients/<slug>/images
+public/client/
+src/generated/

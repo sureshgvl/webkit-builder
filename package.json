@@ -1,0 +1,33 @@
+{
+  "name": "webkit-builder",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "prepare-client": "tsx scripts/prepare-client.ts",
+    "predev": "npm run prepare-client",
+    "dev": "next dev",
+    "prebuild": "npm run prepare-client",
+    "build": "next build",
+    "new-client": "tsx scripts/new-client.ts",
+    "validate": "tsx scripts/validate.ts",
+    "lint": "tsc --noEmit",
+    "screenshots": "node scripts/screenshot.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^1.52.0",
+    "next": "^16.3.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "playwright": "^1.63.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5"
+  }
+}

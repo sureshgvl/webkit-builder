@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice">
+  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#8FD3C8"/><stop offset="1" stop-color="#EAF8F4"/>
+  </linearGradient></defs>
+  <rect width="1200" height="900" fill="url(#sky)"/><rect y="520" width="1200" height="380" fill="#2E8C7E"/><path d="M0 900 L0 520 Q300 470 600 515 T1200 505 L1200 540 L0 540 L1200 900 Z" fill="#2E6B3C"/><path d="M380 640 Q600 700 820 640 L780 610 Q600 650 420 610 Z" fill="#6B3F1F"/><path d="M480 612 Q600 540 720 612" fill="#C9A35E"/><path d="M150 540 Q140 380 190 280 M1050 540 Q1060 400 1010 300" stroke="#5A3A20" stroke-width="14" fill="none"/><path d="M190 280 q-90 0 -120 60 M190 280 q80 -20 130 40 M1010 300 q-90 -10 -130 50 M1010 300 q80 0 120 60" stroke="#2E7D4F" stroke-width="20" fill="none" stroke-linecap="round"/></svg>

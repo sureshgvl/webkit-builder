@@ -1,0 +1,72 @@
+{
+  "industry": "travel",
+  "style": "elegant",
+  "languages": [
+    "en",
+    "mr"
+  ],
+  "siteUrl": "https://demo-travel-elegant.example.com",
+  "business": {
+    "name": "Konkan Escapes",
+    "tagline": {
+      "mr": "कोकणातील निवांत मुक्काम",
+      "en": "Slow travel along the Konkan coast"
+    },
+    "phone": "9876543210",
+    "address": {
+      "mr": "अलिबाग, रायगड",
+      "en": "Alibaug, Raigad"
+    },
+    "socials": {
+      "instagram": "https://instagram.com/example"
+    }
+  },
+  "sections": {
+    "navbar": {
+      "layout": "centered"
+    },
+    "footer": {
+      "layout": "simple"
+    },
+    "hero": {
+      "layout": "split",
+      "image": "/placeholders/beach.svg",
+      "secondaryCta": null
+    },
+    "packages": {
+      "layout": "list"
+    },
+    "features": {
+      "layout": "split",
+      "tone": "default",
+      "image": "/placeholders/fort.svg"
+    },
+    "stats": {
+      "layout": "cards",
+      "tone": "surface"
+    },
+    "gallery": {
+      "layout": "grid"
+    },
+    "testimonials": {
+      "layout": "scroll"
+    },
+    "faq": {
+      "layout": "two-column"
+    },
+    "cta": {
+      "layout": "strip"
+    },
+    "enquiry": {
+      "layout": "simple",
+      "fields": {
+        "package": true,
+        "date": false,
+        "people": true
+      }
+    },
+    "contact": {
+      "layout": "details"
+    }
+  }
+}
