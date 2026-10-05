@@ -13,7 +13,7 @@ export const travel: Preset = {
       name: { mr: "साहस", en: "Adventure" },
       style: "warm",
       layouts: {
-        navbar: "simple", hero: "image", packages: "cards", fleet: "cards", features: "grid", stats: "band", gallery: "masonry",
+        navbar: "simple", hero: "image", packages: "cards", fleet: "compact", features: "grid", stats: "band", gallery: "masonry",
         testimonials: "cards", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
       },
     },
@@ -31,7 +31,7 @@ export const travel: Preset = {
       name: { mr: "फ्रेश", en: "Fresh" },
       style: "modern",
       layouts: {
-        navbar: "simple", hero: "centered", packages: "cards", fleet: "cards", features: "grid", stats: "cards", gallery: "grid",
+        navbar: "simple", hero: "centered", packages: "cards", fleet: "compact", features: "grid", stats: "cards", gallery: "grid",
         testimonials: "scroll", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
       },
     },
@@ -49,7 +49,7 @@ export const travel: Preset = {
       name: { mr: "वारसा", en: "Heritage" },
       style: "elegant",
       layouts: {
-        navbar: "simple", hero: "image", packages: "cards", fleet: "cards", features: "grid", stats: "band", gallery: "masonry",
+        navbar: "simple", hero: "image", packages: "cards", fleet: "compact", features: "grid", stats: "band", gallery: "masonry",
         testimonials: "cards", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
       },
     },
@@ -173,7 +173,7 @@ export const travel: Preset = {
     },
 
     fleet: {
-      layout: "cards",
+      layout: "compact",
       navLabel: { mr: "वाहने", en: "Vehicles" },
       eyebrow: { mr: "प्रवासासाठी वाहने", en: "Vehicles for hire" },
       title: { mr: "आमची वाहने", en: "Our fleet" },

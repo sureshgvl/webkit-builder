@@ -88,6 +88,7 @@ const LAYOUT_NAMES: Record<string, Record<Lang, string>> = {
   map: { en: "With map", mr: "नकाशासह" },
   details: { en: "Details", mr: "फक्त माहिती" },
   columns: { en: "Columns", mr: "कॉलम" },
+  compact: { en: "Compact", mr: "छोटे कार्ड" },
 };
 
 /** White or near-black text, whichever reads better on `hex`. */

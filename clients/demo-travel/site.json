@@ -32,10 +32,156 @@
     "fleet": {
       "items": [
         {
+          "name": "Maruti Suzuki WagonR",
+          "image": "images/fleet/maruti-wagonr.webp",
+          "category": {
+            "mr": "हॅचबॅक",
+            "en": "Hatchback"
+          },
+          "seats": "4+1",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "शहरात फिरण्यासाठी",
+              "en": "City rides"
+            }
+          ]
+        },
+        {
+          "name": "Hyundai Aura",
+          "image": "images/fleet/hyundai-aura.webp",
+          "category": {
+            "mr": "सेडान",
+            "en": "Sedan"
+          },
+          "seats": "4+1",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "मोठी डिकी",
+              "en": "Big boot"
+            }
+          ]
+        },
+        {
+          "name": "Maruti Suzuki Dzire",
+          "image": "images/fleet/maruti-dzire.webp",
+          "category": {
+            "mr": "सेडान",
+            "en": "Sedan"
+          },
+          "seats": "4+1",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "एअरपोर्ट ट्रान्सफर",
+              "en": "Airport transfers"
+            }
+          ]
+        },
+        {
+          "name": "Maruti Suzuki Ertiga",
+          "image": "images/fleet/maruti-ertiga.webp",
+          "category": "MUV",
+          "seats": "6+1",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "कुटुंबासाठी",
+              "en": "Family trips"
+            }
+          ]
+        },
+        {
+          "name": "Mahindra Bolero",
+          "image": "images/fleet/mahindra-bolero.webp",
+          "category": "SUV",
+          "seats": "6+1",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "गावाकडील रस्ते",
+              "en": "Rural roads"
+            }
+          ]
+        },
+        {
+          "name": "Mahindra Scorpio-N",
+          "image": "images/fleet/scorpio-n.webp",
+          "category": "SUV",
+          "seats": "6+1",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "घाट रस्त्यांसाठी उत्तम",
+              "en": "Great on ghat roads"
+            }
+          ]
+        },
+        {
+          "name": "Mahindra XUV700",
+          "image": "images/fleet/mahindra-xuv700.webp",
+          "category": {
+            "mr": "प्रीमियम SUV",
+            "en": "Premium SUV"
+          },
+          "seats": "6+1",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "आरामदायक प्रवास",
+              "en": "Comfortable ride"
+            }
+          ]
+        },
+        {
+          "name": "Mahindra Thar",
+          "image": "images/fleet/mahindra-thar.webp",
+          "category": {
+            "mr": "4x4 SUV",
+            "en": "4x4 SUV"
+          },
+          "seats": "3+1",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "साहसी सहल",
+              "en": "Adventure trips"
+            }
+          ]
+        },
+        {
           "name": "Toyota Innova Crysta",
           "image": "images/fleet/innova-crysta.webp",
-          "category": "SUV",
-          "seats": 7,
+          "category": {
+            "mr": "प्रीमियम MUV",
+            "en": "Premium MUV"
+          },
+          "seats": "7+1",
           "features": [
             {
               "mr": "AC",
@@ -51,10 +197,10 @@
           "name": "Toyota Innova Hycross",
           "image": "images/fleet/innova-hycross.webp",
           "category": {
-            "mr": "प्रीमियम SUV",
-            "en": "Premium SUV"
+            "mr": "प्रीमियम MUV",
+            "en": "Premium MUV"
           },
-          "seats": 7,
+          "seats": "7+1",
           "features": [
             {
               "mr": "AC",
@@ -67,29 +213,13 @@
           ]
         },
         {
-          "name": "Mahindra Scorpio-N",
-          "image": "images/fleet/scorpio-n.webp",
-          "category": "SUV",
-          "seats": 7,
-          "features": [
-            {
-              "mr": "AC",
-              "en": "AC"
-            },
-            {
-              "mr": "घाट रस्त्यांसाठी उत्तम",
-              "en": "Great on ghat roads"
-            }
-          ]
-        },
-        {
           "name": "Force Urbania",
           "image": "images/fleet/force-urbania.webp",
           "category": {
             "mr": "टेम्पो ट्रॅव्हलर",
             "en": "Tempo Traveller"
           },
-          "seats": "13–17",
+          "seats": "12–16 +1",
           "features": [
             {
               "mr": "AC",
@@ -116,7 +246,26 @@
             },
             {
               "mr": "मोठ्या ग्रुपसाठी",
-              "en": "For large groups"
+              "en": "Large groups"
+            }
+          ]
+        },
+        {
+          "name": "Volvo Bus",
+          "image": "images/fleet/volvo-bus.webp",
+          "category": {
+            "mr": "लक्झरी बस",
+            "en": "Luxury bus"
+          },
+          "seats": "45+",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "पुश-बॅक सीट",
+              "en": "Push-back seats"
             }
           ]
         }

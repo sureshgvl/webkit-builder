@@ -36,8 +36,8 @@ function Card({ v, ctx }: { v: Vehicle; ctx: SectionCtx }) {
   const name = ctx.t(v.name);
   return (
     <article className="flex h-full flex-col rounded-card border border-line bg-bg p-4 shadow-sm">
-      <div className="flex aspect-[3/2] items-center justify-center rounded-card bg-gradient-to-b from-surface to-bg">
-        <Img src={ctx.img(v.image)} alt={name} className="max-h-full w-[88%] object-contain drop-shadow-md" />
+      <div className="relative aspect-[3/2] rounded-card bg-gradient-to-b from-surface to-bg">
+        <Img src={ctx.img(v.image)} alt={name} className="absolute inset-0 size-full object-contain p-3 drop-shadow-md" />
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-muted">
         {v.category && <span className="rounded-btn bg-surface px-2.5 py-0.5">{ctx.t(v.category)}</span>}
@@ -112,4 +112,52 @@ function Scroll({ id, data, ctx }: SectionProps<Data>) {
   );
 }
 
-export const fleet = defineSection({ type: "fleet", schema, layouts: { cards: Cards, scroll: Scroll } });
+/** Small cards, 2 per row on phones: good for a big fleet. */
+function Compact({ id, data, ctx }: SectionProps<Data>) {
+  return (
+    <Section id={id} tone={data.tone}>
+      <Container>
+        <SectionHeader eyebrow={ctx.t(data.eyebrow)} title={ctx.t(data.title)} subtitle={ctx.t(data.subtitle)} />
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
+          {data.items.map((v, i) => {
+            const name = ctx.t(v.name);
+            return (
+              <article key={i} className="flex flex-col rounded-card border border-line bg-bg p-3 shadow-sm">
+                <div className="relative aspect-[3/2] rounded-card bg-gradient-to-b from-surface to-bg">
+                  <Img src={ctx.img(v.image)} alt={name} className="absolute inset-0 size-full object-contain p-2 drop-shadow-md" />
+                </div>
+                <h3 className="mt-2 text-base leading-snug md:text-lg">{name}</h3>
+                <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-muted md:text-sm">
+                  {v.category && <span>{ctx.t(v.category)}</span>}
+                  {v.seats !== undefined && (
+                    <span className="inline-flex items-center gap-1">
+                      <Users className="size-3.5" /> {v.seats}
+                    </span>
+                  )}
+                </p>
+                {v.rate !== undefined && (
+                  <p className="mt-1 font-bold text-primary">
+                    {inr.format(v.rate)}
+                    <span className="text-xs font-normal text-muted"> / {ctx.t(v.rateUnit) || "km"}</span>
+                  </p>
+                )}
+                <div className="mt-auto pt-3">
+                  <a
+                    href={ctx.wa(`${ctx.ui.fleet.waBook} ${name}`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-10 items-center justify-center gap-1.5 rounded-btn bg-[#1FA855] text-sm font-semibold text-white"
+                  >
+                    <WhatsAppIcon className="size-4" /> {ctx.ui.fleet.book}
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+export const fleet = defineSection({ type: "fleet", schema, layouts: { compact: Compact, cards: Cards, scroll: Scroll } });

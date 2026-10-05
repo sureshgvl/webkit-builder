@@ -53,7 +53,7 @@ The first layout is the default.
 | `hero` | `image`, `split`, `centered` | Default button is "Enquire on WhatsApp" |
 | `about` | `split`, `centered` | Separate paragraphs in `body` with a blank line |
 | `packages` | `cards`, `list` | Price in rupees, days/nights, highlights; each card has a WhatsApp button |
-| `fleet` | `cards`, `scroll` | Vehicles for hire: cut-out photo, seats, features, optional rate per km; "Book" on WhatsApp |
+| `fleet` | `compact`, `cards`, `scroll` | Vehicles for hire (`compact` = 2 per row on phones, for big fleets): cut-out photo, seats, features, optional rate per km; "Book" on WhatsApp |
 | `features` | `grid`, `split` | `icon` is one of the names in `src/components/icon.tsx` |
 | `stats` | `band`, `cards` | |
 | `gallery` | `masonry`, `grid` | |
