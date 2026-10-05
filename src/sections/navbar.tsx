@@ -39,9 +39,9 @@ function LangSwitch({ ctx }: { ctx: SectionCtx }) {
   );
 }
 
-function MobileMenu({ ctx }: { ctx: SectionCtx }) {
+function MobileMenu({ ctx, className = "md:hidden" }: { ctx: SectionCtx; className?: string }) {
   return (
-    <details className="nav-menu relative md:hidden">
+    <details className={`nav-menu relative ${className}`}>
       <summary className="flex size-11 cursor-pointer items-center justify-center rounded-btn border border-line">
         <Menu className="size-5" />
         <span className="sr-only">{ctx.ui.menu}</span>
@@ -66,7 +66,7 @@ function CallButton({ ctx }: { ctx: SectionCtx }) {
   return (
     <a
       href={ctx.tel}
-      className="hidden items-center gap-2 rounded-btn bg-primary px-4 py-2.5 text-sm font-semibold text-primary-fg sm:inline-flex"
+      className="hidden items-center gap-2 whitespace-nowrap rounded-btn bg-primary px-4 py-2.5 text-sm font-semibold text-primary-fg sm:inline-flex"
     >
       <Phone className="size-4" /> {ctx.ui.call}
     </a>
@@ -78,19 +78,19 @@ function Simple({ ctx }: SectionProps<Data>) {
     <header className="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur">
       <Container className="flex h-16 items-center justify-between gap-4">
         <Brand ctx={ctx} />
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-0.5 xl:flex">
           {ctx.nav.map((n) => (
-            <a key={n.id} href={`#${n.id}`} className="rounded-btn px-3 py-2 text-sm font-medium hover:bg-surface">
+            <a key={n.id} href={`#${n.id}`} className="whitespace-nowrap rounded-btn px-2.5 py-2 text-sm font-medium hover:bg-surface">
               {n.label}
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <div className="hidden md:block">
             <LangSwitch ctx={ctx} />
           </div>
           <CallButton ctx={ctx} />
-          <MobileMenu ctx={ctx} />
+          <MobileMenu ctx={ctx} className="xl:hidden" />
         </div>
       </Container>
     </header>
@@ -111,9 +111,9 @@ function Centered({ ctx }: SectionProps<Data>) {
             <MobileMenu ctx={ctx} />
           </div>
         </div>
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden flex-wrap items-center justify-center gap-1 md:flex">
           {ctx.nav.map((n) => (
-            <a key={n.id} href={`#${n.id}`} className="rounded-btn px-3 py-1.5 text-sm font-medium hover:bg-surface">
+            <a key={n.id} href={`#${n.id}`} className="whitespace-nowrap rounded-btn px-3 py-1.5 text-sm font-medium hover:bg-surface">
               {n.label}
             </a>
           ))}

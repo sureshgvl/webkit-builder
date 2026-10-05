@@ -6,14 +6,14 @@ export const travel: Preset = {
   label: "Travel agency",
   defaultStyle: "warm",
   schemaType: "TravelAgency",
-  mustReplace: ["testimonials", "stats"],
+  mustReplace: ["testimonials", "stats", "fleet"],
   looks: [
     {
       id: "adventure",
       name: { mr: "साहस", en: "Adventure" },
       style: "warm",
       layouts: {
-        navbar: "simple", hero: "image", packages: "cards", features: "grid", stats: "band", gallery: "masonry",
+        navbar: "simple", hero: "image", packages: "cards", fleet: "cards", features: "grid", stats: "band", gallery: "masonry",
         testimonials: "cards", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
       },
     },
@@ -22,7 +22,7 @@ export const travel: Preset = {
       name: { mr: "बुटीक", en: "Boutique" },
       style: "elegant",
       layouts: {
-        navbar: "centered", hero: "split", packages: "list", features: "split", stats: "cards", gallery: "grid",
+        navbar: "centered", hero: "split", packages: "list", fleet: "scroll", features: "split", stats: "cards", gallery: "grid",
         testimonials: "scroll", faq: "two-column", cta: "strip", enquiry: "simple", contact: "details", footer: "simple",
       },
     },
@@ -31,7 +31,7 @@ export const travel: Preset = {
       name: { mr: "फ्रेश", en: "Fresh" },
       style: "modern",
       layouts: {
-        navbar: "simple", hero: "centered", packages: "cards", features: "grid", stats: "cards", gallery: "grid",
+        navbar: "simple", hero: "centered", packages: "cards", fleet: "cards", features: "grid", stats: "cards", gallery: "grid",
         testimonials: "scroll", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
       },
     },
@@ -40,7 +40,7 @@ export const travel: Preset = {
       name: { mr: "किनारा", en: "Coastal" },
       style: "modern",
       layouts: {
-        navbar: "centered", hero: "image", packages: "list", features: "split", stats: "band", gallery: "masonry",
+        navbar: "centered", hero: "image", packages: "list", fleet: "scroll", features: "split", stats: "band", gallery: "masonry",
         testimonials: "cards", faq: "two-column", cta: "strip", enquiry: "simple", contact: "map", footer: "simple",
       },
     },
@@ -49,7 +49,7 @@ export const travel: Preset = {
       name: { mr: "वारसा", en: "Heritage" },
       style: "elegant",
       layouts: {
-        navbar: "simple", hero: "image", packages: "cards", features: "grid", stats: "band", gallery: "masonry",
+        navbar: "simple", hero: "image", packages: "cards", fleet: "cards", features: "grid", stats: "band", gallery: "masonry",
         testimonials: "cards", faq: "accordion", cta: "card", enquiry: "split", contact: "map", footer: "columns",
       },
     },
@@ -58,12 +58,12 @@ export const travel: Preset = {
       name: { mr: "कुटुंब", en: "Family" },
       style: "warm",
       layouts: {
-        navbar: "centered", hero: "split", packages: "cards", features: "split", stats: "cards", gallery: "grid",
+        navbar: "centered", hero: "split", packages: "cards", fleet: "scroll", features: "split", stats: "cards", gallery: "grid",
         testimonials: "scroll", faq: "accordion", cta: "strip", enquiry: "simple", contact: "details", footer: "columns",
       },
     },
   ],
-  order: ["hero", "packages", "features", "stats", "gallery", "testimonials", "faq", "cta", "enquiry", "contact"],
+  order: ["hero", "packages", "fleet", "features", "stats", "gallery", "testimonials", "faq", "cta", "enquiry", "contact"],
   sections: {
     navbar: { layout: "simple" },
     footer: { layout: "columns" },
@@ -168,6 +168,40 @@ export const travel: Preset = {
             { mr: "शाकाहारी जेवण", en: "Vegetarian meals" },
             { mr: "अनुभवी गाइड", en: "Experienced guide" },
           ],
+        },
+      ],
+    },
+
+    fleet: {
+      layout: "cards",
+      navLabel: { mr: "वाहने", en: "Vehicles" },
+      eyebrow: { mr: "प्रवासासाठी वाहने", en: "Vehicles for hire" },
+      title: { mr: "आमची वाहने", en: "Our fleet" },
+      subtitle: {
+        mr: "स्वच्छ, AC वाहने आणि अनुभवी ड्रायव्हर. लग्न, सहल, देवदर्शन आणि एअरपोर्टसाठी.",
+        en: "Clean AC vehicles with experienced drivers. For weddings, tours, pilgrimages and airport transfers.",
+      },
+      items: [
+        {
+          name: { mr: "७-सीटर SUV", en: "7-seater SUV" },
+          image: "/placeholders/vehicle-suv.svg",
+          category: "SUV",
+          seats: 7,
+          features: [{ mr: "AC", en: "AC" }, { mr: "सामानासाठी जागा", en: "Luggage space" }],
+        },
+        {
+          name: { mr: "टेम्पो ट्रॅव्हलर", en: "Tempo Traveller" },
+          image: "/placeholders/vehicle-van.svg",
+          category: { mr: "ग्रुपसाठी", en: "Group" },
+          seats: "12–17",
+          features: [{ mr: "पुश-बॅक सीट", en: "Push-back seats" }, { mr: "AC", en: "AC" }],
+        },
+        {
+          name: { mr: "मिनी बस", en: "Mini bus" },
+          image: "/placeholders/vehicle-bus.svg",
+          category: { mr: "मोठा ग्रुप", en: "Large group" },
+          seats: "26–35",
+          features: [{ mr: "AC", en: "AC" }, { mr: "म्युझिक सिस्टम", en: "Music system" }],
         },
       ],
     },
@@ -323,7 +357,6 @@ export const travel: Preset = {
     enquiry: {
       layout: "split",
       tone: "surface",
-      navLabel: { mr: "चौकशी", en: "Enquire" },
       eyebrow: { mr: "मोफत सल्ला", en: "Free trip planning" },
       title: { mr: "तुमची सहल सांगा", en: "Tell us about your trip" },
       subtitle: {

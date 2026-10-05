@@ -23,8 +23,10 @@ npm run new-client -- patil-tours --industry travel --style warm --langs mr,en
 ```
 
 1. Fill in `clients/patil-tours/site.json` → `business` (name, phone, address, hours…).
-2. Put photos in `clients/patil-tours/images/` and use them as `"images/goa.jpg"`.
-3. Replace the sample **testimonials** and **stats** with the client's real ones (the build warns until you do —
+2. Put photos in `clients/patil-tours/images/` and use them as `"images/goa.jpg"`. Vehicle photos look best as
+   cut-outs (transparent PNG/WebP), e.g. `"images/fleet/innova-crysta.webp"`. If a travel client has no vehicles,
+   remove the section with `"order"`.
+3. Replace the sample **testimonials**, **stats** and **fleet** with the client's real ones (the build warns until you do —
    never publish made-up reviews).
 4. Override anything else you need under `sections` (see below).
 5. Preview with `CLIENT=patil-tours npm run dev`, then deploy (see [Deploy](#deploy-to-vercel)).
@@ -51,6 +53,7 @@ The first layout is the default.
 | `hero` | `image`, `split`, `centered` | Default button is "Enquire on WhatsApp" |
 | `about` | `split`, `centered` | Separate paragraphs in `body` with a blank line |
 | `packages` | `cards`, `list` | Price in rupees, days/nights, highlights; each card has a WhatsApp button |
+| `fleet` | `cards`, `scroll` | Vehicles for hire: cut-out photo, seats, features, optional rate per km; "Book" on WhatsApp |
 | `features` | `grid`, `split` | `icon` is one of the names in `src/components/icon.tsx` |
 | `stats` | `band`, `cards` | |
 | `gallery` | `masonry`, `grid` | |
@@ -77,7 +80,7 @@ A client can keep a style but use its own brand colours:
 
 | Industry | Default style | Sections |
 |---|---|---|
-| `travel` | `warm` | hero, packages, features, stats, gallery, testimonials, faq, cta, enquiry, contact — 6 ready looks |
+| `travel` | `warm` | hero, packages, fleet, features, stats, gallery, testimonials, faq, cta, enquiry, contact — 6 ready looks |
 
 ## Client config reference
 

@@ -58,6 +58,7 @@ const SECTION_NAMES: Record<string, Record<Lang, string>> = {
   hero: { en: "Top banner", mr: "मुख्य बॅनर" },
   about: { en: "About", mr: "आमच्याबद्दल" },
   packages: { en: "Packages", mr: "पॅकेज" },
+  fleet: { en: "Vehicles", mr: "वाहने" },
   features: { en: "Why us", mr: "आम्हालाच का" },
   stats: { en: "Numbers", mr: "आकडे" },
   gallery: { en: "Gallery", mr: "गॅलरी" },

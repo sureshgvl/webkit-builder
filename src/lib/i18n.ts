@@ -46,6 +46,7 @@ const en = {
   },
   contact: { address: "Address", phone: "Phone", email: "Email", hours: "Hours", directions: "Get directions" },
   footer: { rights: "All rights reserved", quickLinks: "Quick links", contact: "Contact" },
+  fleet: { seats: "seats", book: "Book", waBook: "Hi, I'd like to book this vehicle:" },
 };
 
 export type UiStrings = typeof en;
@@ -84,5 +85,6 @@ export const UI: Record<Lang, UiStrings> = {
     },
     contact: { address: "पत्ता", phone: "फोन", email: "ईमेल", hours: "वेळ", directions: "दिशा पहा" },
     footer: { rights: "सर्व हक्क राखीव", quickLinks: "महत्त्वाच्या लिंक", contact: "संपर्क" },
+    fleet: { seats: "आसने", book: "बुक करा", waBook: "नमस्कार, मला हे वाहन बुक करायचे आहे:" },
   },
 };

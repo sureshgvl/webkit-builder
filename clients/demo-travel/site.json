@@ -27,5 +27,100 @@
       "en": "Mon–Sat, 10am to 8pm"
     }
   },
-  "showcase": true
+  "showcase": true,
+  "sections": {
+    "fleet": {
+      "items": [
+        {
+          "name": "Toyota Innova Crysta",
+          "image": "images/fleet/innova-crysta.webp",
+          "category": "SUV",
+          "seats": 7,
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "आरामदायक प्रवास",
+              "en": "Comfortable ride"
+            }
+          ]
+        },
+        {
+          "name": "Toyota Innova Hycross",
+          "image": "images/fleet/innova-hycross.webp",
+          "category": {
+            "mr": "प्रीमियम SUV",
+            "en": "Premium SUV"
+          },
+          "seats": 7,
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "हायब्रिड",
+              "en": "Hybrid"
+            }
+          ]
+        },
+        {
+          "name": "Mahindra Scorpio-N",
+          "image": "images/fleet/scorpio-n.webp",
+          "category": "SUV",
+          "seats": 7,
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "घाट रस्त्यांसाठी उत्तम",
+              "en": "Great on ghat roads"
+            }
+          ]
+        },
+        {
+          "name": "Force Urbania",
+          "image": "images/fleet/force-urbania.webp",
+          "category": {
+            "mr": "टेम्पो ट्रॅव्हलर",
+            "en": "Tempo Traveller"
+          },
+          "seats": "13–17",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "पुश-बॅक सीट",
+              "en": "Push-back seats"
+            }
+          ]
+        },
+        {
+          "name": "Tata Mini Bus",
+          "image": "images/fleet/tata-minibus.webp",
+          "category": {
+            "mr": "मिनी बस",
+            "en": "Mini bus"
+          },
+          "seats": "26–35",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            },
+            {
+              "mr": "मोठ्या ग्रुपसाठी",
+              "en": "For large groups"
+            }
+          ]
+        }
+      ]
+    }
+  }
 }

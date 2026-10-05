@@ -4,6 +4,7 @@ import { cta } from "./cta";
 import { enquiry } from "./enquiry";
 import { faq } from "./faq";
 import { features } from "./features";
+import { fleet } from "./fleet";
 import { footer } from "./footer";
 import { gallery } from "./gallery";
 import { hero } from "./hero";
@@ -15,7 +16,7 @@ import type { SectionDef } from "./types";
 
 /** Content sections that can appear in a page's `order`. */
 export const SECTIONS: Record<string, SectionDef> = Object.fromEntries(
-  [hero, about, packages, features, stats, gallery, testimonials, faq, cta, enquiry, contact].map((s) => [s.type, s as SectionDef]),
+  [hero, about, packages, fleet, features, stats, gallery, testimonials, faq, cta, enquiry, contact].map((s) => [s.type, s as SectionDef]),
 );
 
 /** Page frame, configured under `sections.navbar` / `sections.footer`. */

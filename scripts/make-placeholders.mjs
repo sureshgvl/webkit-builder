@@ -97,9 +97,30 @@ const scenes = {
     `<g fill="#222"><circle cx="420" cy="600" r="46"/><circle cx="780" cy="600" r="46"/></g>`,
 };
 
+// Cut-out vehicles (transparent background) for the fleet section.
+const wheel = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#222"/><circle cx="${x}" cy="${y}" r="${r * 0.45}" fill="#bbb"/>`;
+const vehicles = {
+  "vehicle-suv": () =>
+    `<path d="M120 560 L150 430 Q170 380 230 370 L420 360 L560 250 Q600 225 660 225 L900 225 Q960 225 990 270 L1060 380 Q1090 400 1090 450 L1090 560 Z" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="6"/>` +
+    `<path d="M590 270 L680 260 L680 360 L470 365 Z M710 260 L880 260 Q920 262 940 300 L970 360 L710 360 Z" fill="#93C5FD"/>` +
+    `<rect x="120" y="520" width="970" height="40" fill="#6B7280"/>` + wheel(330, 570, 85) + wheel(890, 570, 85),
+  "vehicle-van": () =>
+    `<path d="M110 580 L110 300 Q110 240 170 240 L860 240 Q920 240 960 300 L1080 450 Q1095 470 1095 500 L1095 580 Z" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="6"/>` +
+    `<g fill="#93C5FD">${[160, 330, 500, 670].map((x) => `<rect x="${x}" y="280" width="150" height="110" rx="10"/>`).join("")}<path d="M850 280 L900 280 Q925 285 945 315 L1020 420 L850 420 Z"/></g>` +
+    `<rect x="110" y="540" width="985" height="40" fill="#6B7280"/>` + wheel(300, 590, 80) + wheel(900, 590, 80),
+  "vehicle-bus": () =>
+    `<rect x="80" y="220" width="1040" height="380" rx="50" fill="#F9FAFB" stroke="#9CA3AF" stroke-width="6"/>` +
+    `<g fill="#93C5FD">${[130, 290, 450, 610, 770].map((x) => `<rect x="${x}" y="270" width="140" height="120" rx="10"/>`).join("")}<rect x="930" y="270" width="150" height="220" rx="14"/></g>` +
+    `<path d="M80 450 H900" stroke="#F59E0B" stroke-width="16"/>` +
+    `<rect x="80" y="560" width="1040" height="40" fill="#6B7280"/>` + wheel(270, 610, 75) + wheel(930, 610, 75),
+};
+
 mkdirSync("public/placeholders", { recursive: true });
+for (const [name, draw] of Object.entries(vehicles)) {
+  writeFileSync(`public/placeholders/${name}.svg`, `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 120 ${W} 600">${draw()}</svg>\n`);
+}
 for (const [name, draw] of Object.entries(scenes)) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">${draw()}</svg>\n`;
   writeFileSync(`public/placeholders/${name}.svg`, svg);
 }
-console.log(`Wrote ${Object.keys(scenes).length} placeholders to public/placeholders/`);
+console.log(`Wrote ${Object.keys(scenes).length + Object.keys(vehicles).length} placeholders to public/placeholders/`);
