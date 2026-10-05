@@ -2,7 +2,7 @@
   "industry": "travel",
   "style": "warm",
   "languages": ["mr", "en"],
-  "siteUrl": "https://demo-travel.example.com",
+  "siteUrl": "https://webkit-builder.vercel.app",
   "business": {
     "name": { "mr": "सह्याद्री हॉलिडेज", "en": "Sahyadri Holidays" },
     "tagline": { "mr": "महाराष्ट्राचा विश्वासू सहल साथी", "en": "Maharashtra's trusted travel partner" },
