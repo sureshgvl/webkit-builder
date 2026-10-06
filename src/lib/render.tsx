@@ -12,11 +12,14 @@ export function digits(phone: string): string {
   return d.length === 10 ? `91${d}` : d;
 }
 
-/** Resolve "images/x.jpg" (client folder), "/placeholders/x.svg" or a URL. */
-export function imageUrl(ref: string | undefined): string | undefined {
+/**
+ * Resolve "images/x.jpg" (client folder), "/placeholders/x.svg" or a URL.
+ * `base` is where the client's own files live: "/client/" for single-site builds, an R2 URL on the platform.
+ */
+export function imageUrl(ref: string | undefined, base = "/client/"): string | undefined {
   if (!ref) return undefined;
   if (/^(https?:)?\/\//.test(ref) || ref.startsWith("/")) return ref;
-  return `/client/${ref.replace(/^\.?\//, "")}`;
+  return `${base.replace(/\/?$/, "/")}${ref.replace(/^\.?\//, "")}`;
 }
 
 export function langPath(site: ResolvedSite, lang: Lang): string {
@@ -36,7 +39,7 @@ export function buildCtx(site: ResolvedSite, lang: Lang): SectionCtx {
     ui: UI[lang],
     business: b,
     t,
-    img: imageUrl,
+    img: (ref) => imageUrl(ref, site.assetBase),
     waNumber,
     wa: (message) => `https://wa.me/${waNumber}${message ? `?text=${encodeURIComponent(message)}` : ""}`,
     tel: `tel:+${digits(b.phone)}`,

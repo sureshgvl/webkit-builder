@@ -5,7 +5,7 @@ import type { ResolvedSite } from "./site";
 
 function heroImage(site: ResolvedSite): string | undefined {
   const hero = site.sections.find((s) => s.type === "hero");
-  return imageUrl(site.config.seo?.image ?? (hero?.data.image as string | undefined));
+  return imageUrl(site.config.seo?.image ?? (hero?.data.image as string | undefined), site.assetBase);
 }
 
 export function siteMetadata(site: ResolvedSite, lang: Lang): Metadata {

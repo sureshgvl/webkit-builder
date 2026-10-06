@@ -12,7 +12,10 @@
     "validate": "tsx scripts/validate.ts",
     "lint": "tsc --noEmit",
     "screenshots": "node scripts/screenshot.mjs",
-    "test:showcase": "node scripts/test-showcase.mjs"
+    "test:showcase": "node scripts/test-showcase.mjs",
+    "build:platform": "PLATFORM=1 next build",
+    "start:platform": "PLATFORM=1 next start",
+    "dev:platform": "PLATFORM=1 next dev"
   },
   "dependencies": {
     "lucide-react": "^1.52.0",
@@ -22,6 +25,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.1146.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22",
     "@types/react": "^19",

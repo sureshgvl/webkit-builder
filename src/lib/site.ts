@@ -20,6 +20,8 @@ export type ResolvedSite = {
   footer: ResolvedSection;
   sections: ResolvedSection[];
   warnings: string[];
+  /** Where the client's own images live ("/client/" in single-site builds, R2 on the platform). */
+  assetBase: string;
 };
 
 export class SiteConfigError extends Error {}
@@ -66,7 +68,12 @@ function resolveSection(
   return { id, type, layout, data: parsed.data as Record<string, unknown> };
 }
 
-export function parseSite(slug: string, raw: unknown, file = `clients/${slug}/site.json`): ResolvedSite {
+export function parseSite(
+  slug: string,
+  raw: unknown,
+  file = `clients/${slug}/site.json`,
+  options: { assetBase?: string } = {},
+): ResolvedSite {
   const parsed = siteSchema.safeParse(raw);
   if (!parsed.success) fail(file, formatIssues(parsed.error.issues));
   const config = parsed.data;
@@ -163,6 +170,7 @@ export function parseSite(slug: string, raw: unknown, file = `clients/${slug}/si
     footer: resolveSection(file, "footer", FRAME.footer, preset.sections.footer, client.footer),
     sections,
     warnings,
+    assetBase: options.assetBase ?? "/client/",
   };
 }
 
