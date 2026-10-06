@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Averix Sites Admin</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#1d2330; --muted:#667085; --border:#e3e6eb; --primary:#1d4ed8; --danger:#b42318; --ok:#067647; --warn:#b54708; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0f1218; --card:#171b23; --text:#e6e8ec; --muted:#98a2b3; --border:#2a303b; --primary:#6b8cff; --danger:#f97066; --ok:#47cd89; --warn:#fdb022; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; }
+  header { display:flex; align-items:center; gap:12px; padding:10px 16px; background:var(--card); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:5; }
+  header b { font-size:15px; }
+  header .sp { flex:1; }
+  main { max-width:1100px; margin:0 auto; padding:16px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px; }
+  h2 { font-size:18px; margin:0 0 12px; } h3 { font-size:15px; margin:16px 0 8px; }
+  label { display:block; font-weight:600; margin:10px 0 4px; font-size:13px; }
+  label small { font-weight:400; color:var(--muted); }
+  input, select, textarea { width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:7px; background:var(--bg); color:var(--text); font:inherit; }
+  textarea { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:12.5px; min-height:120px; }
+  textarea.big { min-height:480px; }
+  button { padding:7px 14px; border-radius:7px; border:1px solid var(--border); background:var(--card); color:var(--text); font:inherit; cursor:pointer; white-space:nowrap; }
+  button.primary { background:var(--primary); border-color:var(--primary); color:#fff; }
+  button.danger { color:var(--danger); }
+  button:disabled { opacity:.5; cursor:default; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:0 14px; }
+  @media (max-width:640px) { .grid2 { grid-template-columns:1fr; } }
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--border); vertical-align:top; }
+  th { font-size:12px; color:var(--muted); font-weight:600; }
+  tr.click { cursor:pointer; } tr.click:hover { background:var(--bg); }
+  .badge { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px; border:1px solid currentColor; }
+  .published { color:var(--ok); } .draft { color:var(--muted); } .suspended { color:var(--danger); }
+  .muted { color:var(--muted); } .small { font-size:12px; }
+  .tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); margin-bottom:14px; overflow-x:auto; }
+  .tabs button { border:none; border-bottom:2px solid transparent; border-radius:0; background:none; }
+  .tabs button.on { border-bottom-color:var(--primary); color:var(--primary); font-weight:600; }
+  .msg { padding:10px 12px; border-radius:7px; margin:10px 0; white-space:pre-wrap; }
+  .msg.err { background:color-mix(in srgb,var(--danger) 12%,transparent); color:var(--danger); }
+  .msg.ok { background:color-mix(in srgb,var(--ok) 12%,transparent); color:var(--ok); }
+  .msg.warn { background:color-mix(in srgb,var(--warn) 12%,transparent); color:var(--warn); }
+  .section { border:1px solid var(--border); border-radius:8px; padding:10px 12px; margin-bottom:10px; }
+  .section summary { cursor:pointer; font-weight:600; }
+  .photos { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
+  .photo { border:1px solid var(--border); border-radius:8px; padding:6px; font-size:12px; word-break:break-all; }
+  .photo img { width:100%; height:100px; object-fit:contain; background:repeating-conic-gradient(#8881 0 25%,transparent 0 50%) 0 0/16px 16px; border-radius:4px; }
+  .hidden { display:none !important; }
+  .login { max-width:360px; margin:12vh auto; }
+  pre { background:var(--bg); padding:10px; border-radius:7px; overflow:auto; max-height:420px; font-size:12px; }
+  #toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); z-index:20; max-width:calc(100% - 32px); }
+</style>
+</head>
+<body>
+<header>
+  <b>Averix Sites</b><span class="muted small" id="who"></span><span class="sp"></span>
+  <button id="btnHome" class="hidden">All sites</button>
+  <button id="btnLogout" class="hidden">Log out</button>
+</header>
+<main id="app"></main>
+<div id="toast"></div>
+<script>
+"use strict";
+// All customer text is inserted with textContent (never innerHTML).
+const API = "";
+const $app = document.getElementById("app");
+let access = null, meta = null;
+
+// ---------------------------------------------------------------- helpers
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (k === "class") el.className = v;
+    else if (k === "value") el.value = v;
+    else if (k === "checked") el.checked = v;
+    else el.setAttribute(k, v === true ? "" : String(v));
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return el;
+}
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} },
+};
+function toast(text, kind = "ok") {
+  const t = document.getElementById("toast");
+  t.replaceChildren(h("div", { class: `msg ${kind}` }, text));
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => t.replaceChildren(), kind === "err" ? 8000 : 3000);
+}
+const fmt = (d) => d ? new Date(d).toLocaleString() : "—";
+const clone = (o) => JSON.parse(JSON.stringify(o));
+
+async function api(method, path, body, headers = {}) {
+  const go = () => fetch(API + path, {
+    method,
+    headers: { ...(access ? { Authorization: `Bearer ${access}` } : {}), ...(body !== undefined && !(body instanceof Blob) ? { "Content-Type": "application/json" } : {}), ...headers },
+    body: body === undefined ? undefined : body instanceof Blob ? body : JSON.stringify(body),
+  });
+  let res = await go();
+  if (res.status === 401 && store.get("rt")) {
+    if (await refreshSession()) res = await go();
+  }
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) { logout(); throw new Error("Please log in again"); }
+  if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+  return data;
+}
+async function refreshSession() {
+  try {
+    const r = await fetch(API + "/api/refresh", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ refresh_token: store.get("rt") }) });
+    if (!r.ok) return false;
+    const s = await r.json();
+    access = s.access_token; store.set("rt", s.refresh_token);
+    return true;
+  } catch { return false; }
+}
+function logout() {
+  access = null; store.set("rt", null);
+  document.getElementById("who").textContent = "";
+  document.getElementById("btnLogout").classList.add("hidden");
+  document.getElementById("btnHome").classList.add("hidden");
+  showLogin();
+}
+document.getElementById("btnLogout").onclick = logout;
+document.getElementById("btnHome").onclick = () => { location.hash = ""; route(); };
+
+/** Localized text: "same everywhere" string or { mr, en }. */
+function locGet(v, l) { return v == null ? "" : typeof v === "string" ? v : (v[l] ?? ""); }
+function locSet(langs, values) {
+  const vals = langs.map((l) => (values[l] || "").trim());
+  if (vals.every((v) => !v)) return undefined;
+  if (langs.length === 1) return vals[0];
+  return Object.fromEntries(langs.map((l, i) => [l, vals[i]]).filter(([, v]) => v));
+}
+
+// ---------------------------------------------------------------- login
+function showLogin(error) {
+  const email = h("input", { type: "email", autocomplete: "username", required: true });
+  const pass = h("input", { type: "password", autocomplete: "current-password", required: true });
+  const err = h("div", { class: error ? "msg err" : "hidden" }, error || "");
+  const btn = h("button", { class: "primary", type: "submit" }, "Log in");
+  $app.replaceChildren(h("form", {
+    class: "card login",
+    onsubmit: async (e) => {
+      e.preventDefault(); btn.disabled = true; err.className = "hidden";
+      try {
+        const r = await fetch(API + "/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email.value, password: pass.value }) });
+        const s = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(s.error || "Login failed");
+        access = s.access_token; store.set("rt", s.refresh_token);
+        await start();
+      } catch (ex) { err.textContent = ex.message; err.className = "msg err"; btn.disabled = false; }
+    },
+  }, h("h2", {}, "Admin login"), h("label", {}, "Email"), email, h("label", {}, "Password"), pass, err, h("div", { class: "row", style: "margin-top:14px" }, btn)));
+  email.focus();
+}
+
+async function start() {
+  const me = await api("GET", "/api/me");
+  meta = await api("GET", "/api/meta");
+  document.getElementById("who").textContent = me.email;
+  document.getElementById("btnLogout").classList.remove("hidden");
+  document.getElementById("btnHome").classList.remove("hidden");
+  route();
+}
+window.addEventListener("hashchange", () => access && route());
+function route() {
+  const m = /^#\/site\/([a-z0-9-]+)$/.exec(location.hash);
+  if (m) return showSite(m[1]);
+  if (location.hash === "#/new") return showNew();
+  return showList();
+}
+
+// ---------------------------------------------------------------- sites list
+async function showList() {
+  $app.replaceChildren(h("div", { class: "card" }, "Loading…"));
+  let sites;
+  try { sites = await api("GET", "/api/sites"); } catch (e) { return $app.replaceChildren(h("div", { class: "msg err" }, e.message)); }
+  const q = h("input", { placeholder: "Search name, site id or address", oninput: () => draw() });
+  const filter = h("select", { onchange: () => draw() }, ["all", "published", "draft", "suspended"].map((s) => h("option", { value: s }, s === "all" ? "All statuses" : s)));
+  const tbody = h("tbody");
+  function draw() {
+    const term = q.value.trim().toLowerCase();
+    const rows = sites.filter((s) => (filter.value === "all" || s.status === filter.value) &&
+      (!term || [s.slug, locGet(s.name, "en"), locGet(s.name, "mr"), ...s.domains.map((d) => d.domain)].join(" ").toLowerCase().includes(term)));
+    tbody.replaceChildren(...rows.map((s) => h("tr", { class: "click", onclick: () => (location.hash = `#/site/${s.slug}`) },
+      h("td", {}, h("div", {}, typeof s.name === "string" ? s.name : locGet(s.name, "en") || locGet(s.name, "mr")), h("div", { class: "muted small" }, s.slug)),
+      h("td", {}, h("span", { class: `badge ${s.status}` }, s.status)),
+      h("td", { class: "small" }, s.domains.length ? s.domains.map((d) => h("div", {}, d.domain)) : h("span", { class: "muted" }, "no address")),
+      h("td", { class: "small muted" }, s.industry),
+      h("td", { class: "small muted" }, fmt(s.updated_at)),
+    )));
+    if (!rows.length) tbody.replaceChildren(h("tr", {}, h("td", { colspan: 5, class: "muted" }, sites.length ? "No match" : "No sites yet — create the first one.")));
+  }
+  draw();
+  const counts = ["published", "draft", "suspended"].map((s) => `${sites.filter((x) => x.status === s).length} ${s}`).join(" · ");
+  $app.replaceChildren(h("div", { class: "card" },
+    h("div", { class: "row", style: "margin-bottom:12px" }, h("h2", { style: "margin:0;flex:1" }, `Sites (${sites.length})`), h("span", { class: "muted small" }, counts),
+      h("button", { class: "primary", onclick: () => (location.hash = "#/new") }, "+ New site")),
+    h("div", { class: "row", style: "margin-bottom:10px" }, h("div", { style: "flex:1;min-width:200px" }, q), h("div", { style: "width:160px" }, filter)),
+    h("div", { style: "overflow-x:auto" }, h("table", {}, h("thead", {}, h("tr", {}, ["Business", "Status", "Addresses", "Industry", "Updated"].map((t) => h("th", {}, t)))), tbody)),
+  ));
+  q.focus();
+}
+
+// ---------------------------------------------------------------- new site
+function showNew() {
+  const err = h("div", { class: "hidden" });
+  const slug = h("input", { placeholder: "patil-tours", pattern: "[a-z0-9]+(-[a-z0-9]+)*", required: true });
+  const industry = h("select", {}, meta.industries.map((i) => h("option", { value: i.id }, i.label)));
+  const look = h("select");
+  const langBoxes = meta.languages.map((l) => h("input", { type: "checkbox", value: l, checked: true, style: "width:auto" }));
+  const nameMr = h("input", { placeholder: "पाटील टूर्स" }), nameEn = h("input", { placeholder: "Patil Tours" });
+  const tagMr = h("input"), tagEn = h("input");
+  const phone = h("input", { placeholder: "+91 98765 43210", required: true }), whatsapp = h("input", { placeholder: "same as phone" });
+  const addrMr = h("input"), addrEn = h("input"), email = h("input", { type: "email" });
+  const setup = h("textarea", { placeholder: 'Optional: paste "Copy setup" from the showcase demo\n{ "style": "...", "sections": { "hero": { "layout": "..." } } }', style: "min-height:90px" });
+  const sub = h("div", { class: "muted small" });
+  function fillLooks() {
+    const ind = meta.industries.find((i) => i.id === industry.value);
+    look.replaceChildren(h("option", { value: "" }, "Industry default"), ...ind.looks.map((l) => h("option", { value: l.id }, `${l.name} (${l.style})`)));
+  }
+  industry.onchange = fillLooks; fillLooks();
+  slug.oninput = () => { slug.value = slug.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"); sub.textContent = meta.platformDomain && slug.value ? `Address: ${slug.value}.${meta.platformDomain}` : ""; };
+  const btn = h("button", { class: "primary", type: "submit" }, "Create draft");
+  $app.replaceChildren(h("form", {
+    class: "card",
+    onsubmit: async (e) => {
+      e.preventDefault(); err.className = "hidden"; btn.disabled = true;
+      const languages = langBoxes.filter((b) => b.checked).map((b) => b.value);
+      try {
+        if (!languages.length) throw new Error("Pick at least one language");
+        let setupObj;
+        if (setup.value.trim()) { try { setupObj = JSON.parse(setup.value); } catch { throw new Error("Setup is not valid JSON"); } }
+        const vals = (mr, en) => locSet(languages, { mr: mr.value, en: en.value });
+        const business = { name: vals(nameMr, nameEn), tagline: vals(tagMr, tagEn), phone: phone.value.trim(), whatsapp: whatsapp.value.trim() || undefined, email: email.value.trim() || undefined, address: vals(addrMr, addrEn) };
+        if (!business.name) throw new Error("Business name is required");
+        await api("POST", "/api/sites", { slug: slug.value, industry: industry.value, look: look.value || undefined, languages, business: JSON.parse(JSON.stringify(business)), setup: setupObj });
+        toast("Draft created");
+        location.hash = `#/site/${slug.value}`;
+      } catch (ex) { err.textContent = ex.message; err.className = "msg err"; btn.disabled = false; }
+    },
+  },
+    h("h2", {}, "New site"),
+    h("div", { class: "grid2" },
+      h("div", {}, h("label", {}, "Site id ", h("small", {}, "(lowercase, used in the address)")), slug, sub),
+      h("div", {}, h("label", {}, "Industry"), industry),
+      h("div", {}, h("label", {}, "Look"), look),
+      h("div", {}, h("label", {}, "Languages ", h("small", {}, "(first = default)")), h("div", { class: "row" }, langBoxes.map((b) => h("label", { style: "font-weight:400;margin:0;display:flex;gap:6px" }, b, b.value)))),
+      h("div", {}, h("label", {}, "Business name (Marathi)"), nameMr), h("div", {}, h("label", {}, "Business name (English)"), nameEn),
+      h("div", {}, h("label", {}, "Tagline (Marathi)"), tagMr), h("div", {}, h("label", {}, "Tagline (English)"), tagEn),
+      h("div", {}, h("label", {}, "Phone"), phone), h("div", {}, h("label", {}, "WhatsApp"), whatsapp),
+      h("div", {}, h("label", {}, "Address (Marathi)"), addrMr), h("div", {}, h("label", {}, "Address (English)"), addrEn),
+      h("div", {}, h("label", {}, "Email"), email),
+    ),
+    h("label", {}, "Showcase setup"), setup,
+    err,
+    h("div", { class: "row", style: "margin-top:14px" }, btn, h("button", { type: "button", onclick: () => (location.hash = "") }, "Cancel")),
+  ));
+  slug.focus();
+}
+
+// ---------------------------------------------------------------- site editor
+let ed = null; // { slug, detail, config, saved, tab }
+
+async function showSite(slug, tab) {
+  $app.replaceChildren(h("div", { class: "card" }, "Loading…"));
+  try {
+    const detail = await api("GET", `/api/sites/${slug}`);
+    ed = { slug, detail, config: clone(detail.site.config), saved: JSON.stringify(detail.site.config), tab: tab || ed?.slug === slug && ed.tab || "business" };
+    drawSite();
+  } catch (e) { $app.replaceChildren(h("div", { class: "msg err" }, e.message)); }
+}
+const dirty = () => ed && JSON.stringify(ed.config) !== ed.saved;
+window.addEventListener("beforeunload", (e) => { if (dirty()) e.preventDefault(); });
+
+function industryMeta() { return meta.industries.find((i) => i.id === ed.config.industry); }
+
+function drawSite() {
+  const { detail, config } = ed;
+  const s = detail.site;
+  const primary = detail.domains.find((d) => d.is_primary);
+  const name = locGet(config.business?.name, "en") || locGet(config.business?.name, "mr") || s.slug;
+  const saveMsg = h("div");
+  const note = h("input", { placeholder: "What changed? (optional)", style: "max-width:260px" });
+  const saveBtn = h("button", { class: "primary", onclick: save }, "Save");
+  async function save() {
+    saveBtn.disabled = true;
+    try {
+      const r = await api("PUT", `/api/sites/${s.slug}/config`, { config: ed.config, note: note.value || undefined });
+      ed.detail = r; ed.saved = JSON.stringify(r.site.config); ed.config = clone(r.site.config);
+      toast(s.status === "published" ? (r.refreshed ? "Saved — live site updated" : "Saved (live site will update within 5 minutes)") : "Saved");
+      drawSite();
+    } catch (e) { saveMsg.replaceChildren(h("div", { class: "msg err" }, e.message)); saveBtn.disabled = false; }
+  }
+  async function setStatus(status) {
+    if (status !== "published" && !confirm(`${status === "suspended" ? "Suspend" : "Unpublish"} ${name}? Visitors will see "not found".`)) return;
+    if (dirty() && !confirm("You have unsaved changes; the last saved version is used. Continue?")) return;
+    try { ed.detail = await api("POST", `/api/sites/${s.slug}/status`, { status }); toast(`Site is now ${status}`); drawSite(); }
+    catch (e) { toast(e.message, "err"); }
+  }
+  async function preview() {
+    const w = window.open("about:blank", "_blank");
+    try {
+      if (dirty()) toast("Preview shows the last saved version — save first to see your changes", "warn");
+      const { url } = await api("POST", `/api/sites/${s.slug}/preview`);
+      if (w) w.location = url; else location.href = url;
+    } catch (e) { w && w.close(); toast(e.message, "err"); }
+  }
+  const tabs = [["business", "Business"], ["design", "Design"], ["sections", "Sections"], ["photos", "Photos"], ["domains", "Addresses"], ["history", "History"], ["json", "Advanced (JSON)"]];
+  const body = h("div");
+  const drawTab = () => {
+    tabBar.querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.t === ed.tab));
+    body.replaceChildren((TABS[ed.tab] || TABS.business)());
+  };
+  const tabBar = h("div", { class: "tabs" }, tabs.map(([id, label]) => h("button", { "data-t": id, onclick: () => { ed.tab = id; drawTab(); } }, label)));
+  $app.replaceChildren(
+    h("div", { class: "card" },
+      h("div", { class: "row" },
+        h("div", { style: "flex:1;min-width:220px" },
+          h("h2", { style: "margin:0" }, name, " ", h("span", { class: `badge ${s.status}` }, s.status)),
+          h("div", { class: "muted small" }, s.slug, " · ", config.industry, " · updated ", fmt(s.updated_at),
+            primary ? [" · ", h("a", { href: `https://${primary.domain}/`, target: "_blank", rel: "noopener" }, primary.domain)] : "")),
+        h("button", { onclick: preview }, "Preview"),
+        s.status !== "published" ? h("button", { class: "primary", onclick: () => setStatus("published") }, "Publish") : h("button", { onclick: () => setStatus("draft") }, "Unpublish"),
+        s.status !== "suspended" ? h("button", { class: "danger", onclick: () => setStatus("suspended") }, "Suspend") : null,
+      ),
+      detail.warnings?.length ? h("div", { class: "msg warn" }, "Before publishing:\n• " + detail.warnings.join("\n• ")) : null,
+    ),
+    h("div", { class: "card" }, tabBar, body,
+      h("div", { class: "row", style: "margin-top:16px;border-top:1px solid var(--border);padding-top:12px" }, saveBtn, note,
+        h("button", { onclick: () => { if (!dirty() || confirm("Discard unsaved changes?")) { ed.config = JSON.parse(ed.saved); drawSite(); } } }, "Discard changes"),
+        h("span", { class: "muted small" }, dirty() ? "Unsaved changes" : "")),
+      saveMsg),
+  );
+  drawTab();
+}
+
+const TABS = {
+  business() {
+    const c = ed.config, b = (c.business ||= {});
+    const langs = c.languages || ["mr", "en"];
+    const wrap = h("div", { class: "grid2" });
+    function loc(key, label) {
+      const inputs = langs.map((l) => h("input", { value: locGet(b[key], l), oninput: () => {
+        const v = locSet(langs, Object.fromEntries(langs.map((x, i) => [x, inputs[i].value])));
+        if (v === undefined) delete b[key]; else b[key] = v;
+      } }));
+      langs.forEach((l, i) => wrap.append(h("div", {}, h("label", {}, `${label} (${l === "mr" ? "Marathi" : l === "en" ? "English" : l})`), inputs[i])));
+    }
+    function plain(key, label, attrs = {}) {
+      wrap.append(h("div", {}, h("label", {}, label), h("input", { ...attrs, value: b[key] ?? "", oninput: (e) => { const v = e.target.value.trim(); if (v) b[key] = v; else delete b[key]; } })));
+    }
+    loc("name", "Business name"); loc("tagline", "Tagline");
+    plain("phone", "Phone"); plain("whatsapp", "WhatsApp", { placeholder: "same as phone" });
+    plain("email", "Email", { type: "email" }); plain("mapQuery", "Google Maps search", { placeholder: "defaults to address" });
+    loc("address", "Address"); loc("hours", "Opening hours");
+    plain("logo", "Logo", { placeholder: "images/logo.webp (upload in Photos)" });
+    const so = (b.socials ||= {});
+    for (const k of ["instagram", "facebook", "youtube"]) {
+      wrap.append(h("div", {}, h("label", {}, k[0].toUpperCase() + k.slice(1)), h("input", { type: "url", value: so[k] ?? "", placeholder: "https://…", oninput: (e) => {
+        const v = e.target.value.trim(); if (v) so[k] = v; else delete so[k];
+        if (!Object.keys(so).length) delete b.socials; else b.socials = so;
+      } })));
+    }
+    if (!Object.keys(so).length) delete b.socials;
+    const site = h("input", { type: "url", value: c.siteUrl ?? "", placeholder: "https://patiltours.in (defaults to the visitor's address)", oninput: (e) => { const v = e.target.value.trim(); if (v) c.siteUrl = v; else delete c.siteUrl; } });
+    const ga = h("input", { value: c.analytics?.ga4 ?? "", placeholder: "G-XXXXXXX", oninput: (e) => { const v = e.target.value.trim(); if (v) c.analytics = { ga4: v }; else delete c.analytics; } });
+    return h("div", {}, wrap, h("div", { class: "grid2" }, h("div", {}, h("label", {}, "Website URL"), site), h("div", {}, h("label", {}, "Google Analytics ID"), ga)));
+  },
+
+  design() {
+    const c = ed.config;
+    const styleSel = h("select", { onchange: () => { c.style = styleSel.value; } }, meta.styles.map((s) => h("option", { value: s.id }, `${s.label} — ${s.description}`)));
+    styleSel.value = c.style;
+    const ind = industryMeta();
+    const lookBtns = (ind?.looks || []).map((l) => h("button", { onclick: () => {
+      if (!confirm(`Apply look "${l.name}"? Style and section layouts change; your text stays.`)) return;
+      c.style = l.style; c.sections ||= {};
+      for (const [id, layout] of Object.entries(l.layouts)) c.sections[id] = { ...(c.sections[id] || {}), layout };
+      toast(`Look "${l.name}" applied — save to keep it`); drawSite();
+    } }, l.name));
+    const base = meta.styles.find((s) => s.id === c.style)?.colors || {};
+    const keys = ["primary", "primaryFg", "accent", "bg", "surface", "text", "muted", "border"];
+    const colors = h("div", { class: "grid2" }, keys.map((k) => {
+      const txt = h("input", { value: c.colors?.[k] ?? "", placeholder: base[k] || "", oninput: () => {
+        const v = txt.value.trim(); c.colors ||= {};
+        if (v) c.colors[k] = v; else delete c.colors[k];
+        if (!Object.keys(c.colors).length) delete c.colors;
+        if (/^#[0-9a-f]{6}$/i.test(v)) pick.value = v;
+      } });
+      const pick = h("input", { type: "color", value: /^#[0-9a-f]{6}$/i.test(c.colors?.[k] || base[k] || "") ? (c.colors?.[k] || base[k]) : "#000000", style: "width:44px;padding:2px", oninput: () => { txt.value = pick.value; txt.dispatchEvent(new Event("input")); } });
+      return h("div", {}, h("label", {}, k), h("div", { class: "row", style: "flex-wrap:nowrap" }, pick, txt));
+    }));
+    const langs = h("input", { value: (c.languages || []).join(", "), oninput: (e) => { c.languages = e.target.value.split(",").map((x) => x.trim()).filter(Boolean); } });
+    return h("div", {},
+      h("label", {}, "Ready-made looks"), h("div", { class: "row" }, lookBtns.length ? lookBtns : h("span", { class: "muted" }, "none")),
+      h("label", {}, "Style"), styleSel,
+      h("label", {}, "Languages ", h("small", {}, `(comma separated, first = default; available: ${meta.languages.join(", ")})`)), langs,
+      h("h3", {}, "Brand colours ", h("small", { class: "muted" }, "(empty = style default)")), colors);
+  },
+
+  sections() {
+    const c = ed.config, ind = industryMeta();
+    const order = c.order || ind?.order || Object.keys(ind?.sections || {});
+    const allIds = [...new Set([...order, ...Object.keys(ind?.sections || {}), ...Object.keys(c.sections || {})])];
+    const list = h("div");
+    const orderInput = h("input", { value: order.join(", "), onchange: () => {
+      const v = orderInput.value.split(",").map((x) => x.trim()).filter(Boolean);
+      if (v.length) c.order = v; else delete c.order;
+    } });
+    for (const id of allIds) {
+      const over = c.sections?.[id] || {};
+      const preset = ind?.sections?.[id] || {};
+      const type = over.type || preset.type || id;
+      const layouts = meta.sectionTypes[type]?.layouts || [];
+      const sel = h("select", { onchange: () => { c.sections ||= {}; c.sections[id] = { ...(c.sections[id] || {}), layout: sel.value }; if (!sel.value) delete c.sections[id].layout; area.value = JSON.stringify(c.sections[id], null, 2); } },
+        h("option", { value: "" }, "Default layout"), layouts.map((l) => h("option", { value: l }, l)));
+      sel.value = over.layout || "";
+      const err = h("div", { class: "small" });
+      const area = h("textarea", { value: Object.keys(over).length ? JSON.stringify(over, null, 2) : "{}", oninput: () => {
+        try {
+          const v = JSON.parse(area.value || "{}");
+          if (typeof v !== "object" || Array.isArray(v) || v === null) throw new Error("Must be an object { … }");
+          c.sections ||= {};
+          if (Object.keys(v).length) c.sections[id] = v; else delete c.sections[id];
+          sel.value = v.layout || ""; err.textContent = ""; err.className = "small";
+        } catch (e) { err.textContent = `Not saved yet: ${e.message}`; err.className = "small msg err"; }
+      } });
+      const shown = order.includes(id) || id === "navbar" || id === "footer"; // navbar/footer are always on the page
+      list.append(h("details", { class: "section" },
+        h("summary", {}, id, type !== id ? ` (${type})` : "", shown ? "" : h("span", { class: "muted small" }, " — hidden (not in order)"), over.layout ? h("span", { class: "muted small" }, ` · ${over.layout}`) : ""),
+        h("label", {}, "Layout"), sel,
+        h("label", {}, "Your changes ", h("small", {}, "(each key replaces the industry default; null removes it)")), area, err,
+        h("details", {}, h("summary", { class: "muted small" }, "Industry default content (copy keys from here)"), h("pre", {}, JSON.stringify(preset, null, 2)))));
+    }
+    return h("div", {}, h("label", {}, "Page order ", h("small", {}, "(section ids, comma separated; leave out a section to hide it)")), orderInput, h("h3", {}, "Sections"), list);
+  },
+
+  photos() {
+    const box = h("div", { class: "photos" }, h("span", { class: "muted" }, "Loading…"));
+    const kind = h("select", { style: "width:auto" }, h("option", { value: "photo" }, "Photos (max 1600px)"), h("option", { value: "logo" }, "Logo (512px)"));
+    const status = h("span", { class: "muted small" });
+    const file = h("input", { type: "file", accept: "image/*", multiple: true, style: "width:auto", onchange: async () => {
+      const files = [...file.files];
+      for (const [i, f] of files.entries()) {
+        status.textContent = `Uploading ${i + 1}/${files.length}: ${f.name}`;
+        try {
+          const r = await api("POST", `/api/sites/${ed.slug}/images`, f, { "X-Filename": encodeURIComponent(f.name), "X-Kind": kind.value });
+          if (kind.value === "logo") { ed.config.business.logo = r.ref; toast("Logo uploaded and set — save to keep it"); }
+        } catch (e) { toast(`${f.name}: ${e.message}`, "err"); }
+      }
+      status.textContent = ""; file.value = ""; load();
+    } });
+    async function load() {
+      try {
+        const imgs = await api("GET", `/api/sites/${ed.slug}/images`);
+        const used = JSON.stringify(ed.config);
+        box.replaceChildren(...(imgs.length ? imgs.map((im) => h("div", { class: "photo" },
+          h("img", { src: im.url, alt: "", loading: "lazy" }),
+          h("div", {}, im.ref), h("div", { class: "muted" }, `${Math.round(im.size / 1024)} KB`, used.includes(`"${im.ref}"`) ? " · in use" : ""),
+          h("div", { class: "row", style: "margin-top:4px" },
+            h("button", { onclick: () => { navigator.clipboard?.writeText(im.ref); toast(`Copied ${im.ref}`); } }, "Copy"),
+            h("button", { class: "danger", onclick: async () => {
+              if (used.includes(`"${im.ref}"`) && !confirm(`${im.ref} is used on the site. Delete anyway?`)) return;
+              try { await api("DELETE", `/api/sites/${ed.slug}/${im.ref}`); load(); } catch (e) { toast(e.message, "err"); }
+            } }, "Delete")))) : [h("span", { class: "muted" }, "No photos yet")]));
+      } catch (e) { box.replaceChildren(h("div", { class: "msg err" }, e.message)); }
+    }
+    load();
+    return h("div", {}, h("div", { class: "row", style: "margin-bottom:12px" }, kind, file, status),
+      h("p", { class: "muted small" }, "Phone photos are fine: they are rotated, resized and converted to WebP. Use the copied name (e.g. images/innova.webp) in a section's image field."), box);
+  },
+
+  domains() {
+    const d = ed.detail;
+    const input = h("input", { placeholder: "patiltours.in" });
+    const out = h("div");
+    const rows = d.domains.map((x) => h("tr", {},
+      h("td", {}, h("a", { href: `https://${x.domain}/`, target: "_blank", rel: "noopener" }, x.domain), x.is_primary ? h("span", { class: "muted small" }, " (main)") : ""),
+      h("td", { class: "small" }, x.kind), h("td", { class: "small" }, x.verified ? h("span", { class: "published" }, "working") : h("span", { class: "muted" }, "waiting for DNS")),
+      h("td", {}, h("div", { class: "row" },
+        x.kind === "custom" ? h("button", { onclick: async () => {
+          try {
+            const r = await api("GET", `/api/sites/${ed.slug}/domains/${x.domain}/check`);
+            out.replaceChildren(h("div", { class: `msg ${r.verified && r.configured ? "ok" : "warn"}` },
+              r.verified && r.configured ? `${x.domain} is working.` : r.error ? r.error : `Ask the client to add these DNS records at their domain provider:\n` + r.instructions.map((i) => `${i.type}  ${i.name}  →  ${i.value}`).join("\n")));
+          } catch (e) { toast(e.message, "err"); }
+        } }, "Check DNS") : null,
+        h("button", { class: "danger", onclick: async () => {
+          if (!confirm(`Remove ${x.domain} from this site?`)) return;
+          try { ed.detail = await api("DELETE", `/api/sites/${ed.slug}/domains/${x.domain}`); drawSite(); } catch (e) { toast(e.message, "err"); }
+        } }, "Remove")))));
+    return h("div", {},
+      h("table", {}, h("thead", {}, h("tr", {}, ["Address", "Type", "Status", ""].map((t) => h("th", {}, t)))), h("tbody", {}, rows.length ? rows : h("tr", {}, h("td", { colspan: 4, class: "muted" }, "No addresses")))),
+      h("h3", {}, "Add the client's own domain"),
+      h("div", { class: "row" }, h("div", { style: "flex:1;min-width:200px" }, input), h("button", { class: "primary", onclick: async () => {
+        try {
+          const r = await api("POST", `/api/sites/${ed.slug}/domains`, { domain: input.value });
+          ed.detail = r; drawSite();
+          toast(r.vercelError ? `Saved, but Vercel said: ${r.vercelError}` : r.vercel ? "Added — now click Check DNS" : "Added — also add it in Vercel → Domains", r.vercelError ? "err" : "ok");
+        } catch (e) { toast(e.message, "err"); }
+      } }, "Add")),
+      h("p", { class: "muted small" }, "www.<domain> is added automatically and opens the same site."), out);
+  },
+
+  history() {
+    const view = h("div");
+    return h("div", {},
+      h("table", {}, h("thead", {}, h("tr", {}, ["#", "When", "By", "Note", ""].map((t) => h("th", {}, t)))),
+        h("tbody", {}, ed.detail.versions.map((v, i) => h("tr", {},
+          h("td", {}, v.id), h("td", { class: "small" }, fmt(v.created_at)), h("td", { class: "small" }, v.created_by || "—"), h("td", { class: "small" }, v.note || "", i === 0 ? h("span", { class: "muted" }, " (current)") : ""),
+          h("td", {}, h("div", { class: "row" },
+            h("button", { onclick: async () => {
+              try { const r = await api("GET", `/api/sites/${ed.slug}/versions/${v.id}`); view.replaceChildren(h("h3", {}, `Version ${v.id}`), h("pre", {}, JSON.stringify(r.config, null, 2))); }
+              catch (e) { toast(e.message, "err"); }
+            } }, "View"),
+            i > 0 ? h("button", { onclick: async () => {
+              if (!confirm(`Restore version ${v.id}? The current settings stay in history.`)) return;
+              try { const r = await api("POST", `/api/sites/${ed.slug}/restore`, { versionId: v.id }); ed.detail = r; ed.config = clone(r.site.config); ed.saved = JSON.stringify(r.site.config); toast(`Restored version ${v.id}`); drawSite(); }
+              catch (e) { toast(e.message, "err"); }
+            } }, "Restore") : null)))))),
+      view);
+  },
+
+  json() {
+    const err = h("div", { class: "small" });
+    const area = h("textarea", { class: "big", value: JSON.stringify(ed.config, null, 2), oninput: () => {
+      try { const v = JSON.parse(area.value); if (typeof v !== "object" || !v || Array.isArray(v)) throw new Error("Must be an object"); ed.config = v; err.textContent = ""; err.className = "small"; }
+      catch (e) { err.textContent = `Not applied: ${e.message}`; err.className = "small msg err"; }
+    } });
+    return h("div", {}, h("p", { class: "muted small" }, "The full site settings, same format as clients/<slug>/site.json. Checked on save."), area, err);
+  },
+};
+
+// ---------------------------------------------------------------- boot
+(async () => {
+  if (store.get("rt") && (await refreshSession())) {
+    try { return await start(); } catch {}
+  }
+  showLogin();
+})();
+</script>
+</body>
+</html>

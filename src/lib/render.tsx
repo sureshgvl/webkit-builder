@@ -23,7 +23,8 @@ export function imageUrl(ref: string | undefined, base = "/client/"): string | u
 }
 
 export function langPath(site: ResolvedSite, lang: Lang): string {
-  return lang === site.defaultLang ? "/" : `/${lang}/`;
+  const base = site.pathBase ?? "";
+  return lang === site.defaultLang ? `${base}/` : `${base}/${lang}/`;
 }
 
 export function buildCtx(site: ResolvedSite, lang: Lang): SectionCtx {

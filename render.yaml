@@ -1,0 +1,41 @@
+# Render Blueprint for the Averix backend (admin API + admin panel).
+# Render → New → Blueprint → pick this repo. Secrets are entered in the Render dashboard, never here.
+services:
+  - type: web
+    name: averix-backend
+    runtime: node
+    region: singapore
+    plan: starter # free also works for testing, but it sleeps after 15 minutes idle
+    branch: platform
+    buildCommand: npm ci && npm run build:backend
+    startCommand: npm run start:backend
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL # Supabase → Connect → Session pooler (port 5432)
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: ADMIN_EMAILS # comma separated
+        sync: false
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET
+        value: averix-sites
+      - key: ASSETS_BASE_URL
+        sync: false
+      - key: WEBSITE_URL # the Vercel platform project, e.g. https://averix-platform.vercel.app
+        sync: false
+      - key: REVALIDATE_SECRET # same value as on Vercel
+        sync: false
+      - key: PREVIEW_SECRET
+        generateValue: true
+      - key: PLATFORM_DOMAIN # later, e.g. averix.site
+        sync: false

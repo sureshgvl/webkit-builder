@@ -9,3 +9,5 @@ next-env.d.ts
 public/client/
 src/generated/
 screenshots/
+backend/dist/
+backend/test/screenshots/

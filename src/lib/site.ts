@@ -22,6 +22,8 @@ export type ResolvedSite = {
   warnings: string[];
   /** Where the client's own images live ("/client/" in single-site builds, R2 on the platform). */
   assetBase: string;
+  /** Path prefix for language links (platform draft previews live under /preview/<token>). */
+  pathBase?: string;
 };
 
 export class SiteConfigError extends Error {}

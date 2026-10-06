@@ -90,3 +90,17 @@ jobs:
             -f supabase/migrations/20261006000000_sites.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_test.sql
       - run: npm run build:platform
+      - run: npm run build:backend
+      - name: Backend API test (admin login, sites, photos, preview, publish, domains, history)
+        env:
+          PGDATABASE: postgres
+        run: |
+          node backend/test/fakes.mjs &
+          BACKEND_URL=http://127.0.0.1:4000 REVALIDATE_SECRET=ci-rv SUPABASE_URL=http://127.0.0.1:3600 SUPABASE_ANON_KEY=anon-key \
+            ASSETS_BASE_URL=http://127.0.0.1:3600/r2 npm run start:platform -- -p 3000 &
+          DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres SUPABASE_URL=http://127.0.0.1:3600 SUPABASE_ANON_KEY=anon-key \
+            ADMIN_EMAILS=admin@test.in R2_BUCKET=b R2_ENDPOINT=http://127.0.0.1:3600/s3 R2_ACCESS_KEY_ID=k R2_SECRET_ACCESS_KEY=s \
+            ASSETS_BASE_URL=http://127.0.0.1:3600/r2 WEBSITE_URL=http://127.0.0.1:3000 REVALIDATE_SECRET=ci-rv PREVIEW_SECRET=ci-pv \
+            PLATFORM_DOMAIN=localhost PORT=4000 npm run start:backend &
+          for i in $(seq 60); do curl -sf http://127.0.0.1:4000/health && curl -s -o /dev/null http://127.0.0.1:3000/ && break; sleep 1; done
+          node backend/test/api.test.mjs

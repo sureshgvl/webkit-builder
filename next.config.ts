@@ -24,8 +24,10 @@ const multi: NextConfig = {
       // (A direct /sites/<other-host>/ request is rewritten too, so it can't show another client's site.)
       beforeFiles: [
         {
-          source: "/:path((?!_next/|api/|dev-assets/|placeholders/).*)",
-          has: [{ type: "host", value: "(?<host>.+)" }],
+          source: "/:path((?!_next/|api/|dev-assets/|placeholders/|preview/).*)",
+          // Next matches the host without its port; "www." is left out so www.patiltours.in and patiltours.in
+          // share one cached page.
+          has: [{ type: "host", value: "(?:www\\.)?(?<host>.+?)\\.?" }],
           destination: "/sites/:host/:path",
         },
       ],
