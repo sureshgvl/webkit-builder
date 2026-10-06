@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { calculateFare, rupees, tripDays, type FareSettings } from "@/lib/fare";
 import type { Lang } from "@/lib/i18n";
 import { WhatsAppIcon } from "./icon";
@@ -17,6 +17,8 @@ export type FareCalculatorProps = {
   defaultPickup?: string;
   /** Google Maps browser key (restricted to the site's domain). Without it, km is typed or picked from routes. */
   mapsKey?: string;
+  /** Address suggestions prefer places near here (the business's city). */
+  near?: { lat: number; lng: number };
   waNumber: string;
 };
 
@@ -161,6 +163,46 @@ async function roadKm(key: string, lang: Lang, from: string, to: string): Promis
   throw new Error("No route");
 }
 
+type Suggestion = { text: string; main: string; secondary: string };
+type PlacesLib = {
+  AutocompleteSessionToken: new () => unknown;
+  AutocompleteSuggestion: {
+    fetchAutocompleteSuggestions(req: Record<string, unknown>): Promise<{
+      suggestions: {
+        placePrediction?: { text?: { text?: string }; mainText?: { text?: string }; secondaryText?: { text?: string } } | null;
+      }[];
+    }>;
+  };
+};
+
+/**
+ * Address suggestions from Google Places API (New), limited to India and biased towards `near`.
+ * Needs "Places API (New)" enabled for the key. Returns [] on any error so typing always still works.
+ */
+async function placeSuggestions(key: string, lang: Lang, input: string, token: unknown, near?: { lat: number; lng: number }): Promise<Suggestion[]> {
+  const maps = await loadMaps(key, lang);
+  const lib = (await maps.importLibrary?.("places")) as unknown as PlacesLib | undefined;
+  if (!lib?.AutocompleteSuggestion) return [];
+  const { suggestions } = await lib.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+    input,
+    sessionToken: token,
+    includedRegionCodes: ["in"],
+    language: lang,
+    ...(near ? { locationBias: { center: near, radius: 50_000 } } : {}),
+  });
+  return suggestions
+    .map((x) => x.placePrediction)
+    .filter((p): p is NonNullable<typeof p> => Boolean(p?.text?.text))
+    .slice(0, 5)
+    .map((p) => ({ text: p.text!.text!, main: p.mainText?.text ?? p.text!.text!, secondary: p.secondaryText?.text ?? "" }));
+}
+
+async function newSessionToken(key: string, lang: Lang): Promise<unknown> {
+  const maps = await loadMaps(key, lang);
+  const lib = (await maps.importLibrary?.("places")) as unknown as PlacesLib | undefined;
+  return lib?.AutocompleteSessionToken ? new lib.AutocompleteSessionToken() : undefined;
+}
+
 // ---------------------------------------------------------------- component
 
 const field =
@@ -170,7 +212,135 @@ function todayIST(): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
 }
 
-export function FareCalculator({ lang, vehicles, settings, routes, places, defaultPickup = "", mapsKey, waNumber }: FareCalculatorProps) {
+/** Place box: Google address suggestions when a key is set, otherwise the site's own place list. */
+function PlaceInput({
+  label,
+  value,
+  onType,
+  onPick,
+  mapsKey,
+  lang,
+  places,
+  near,
+}: {
+  label: string;
+  value: string;
+  onType: (v: string) => void;
+  onPick: (v: string) => void;
+  mapsKey?: string;
+  lang: Lang;
+  places: string[];
+  near?: { lat: number; lng: number };
+}) {
+  const id = useId();
+  const [items, setItems] = useState<Suggestion[]>([]);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(-1);
+  const token = useRef<unknown>(undefined);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const latest = useRef("");
+
+  // Without a key: suggest from the site's own list of places.
+  const local = (q: string): Suggestion[] =>
+    places
+      .filter((p) => p.toLowerCase().includes(q.toLowerCase()) && p.toLowerCase() !== q.toLowerCase())
+      .slice(0, 6)
+      .map((p) => ({ text: p, main: p, secondary: "" }));
+
+  function search(q: string) {
+    latest.current = q;
+    clearTimeout(timer.current);
+    if (q.trim().length < 2) return setItems([]);
+    if (!mapsKey) return setItems(local(q));
+    timer.current = setTimeout(async () => {
+      try {
+        token.current ??= await newSessionToken(mapsKey, lang);
+        const found = await placeSuggestions(mapsKey, lang, q, token.current, near);
+        if (latest.current === q) setItems(found.length ? found : local(q));
+      } catch (e) {
+        console.warn("Google place suggestions unavailable:", (e as Error).message);
+        if (latest.current === q) setItems(local(q));
+      }
+    }, 250);
+  }
+
+  function pick(sug: Suggestion) {
+    onPick(sug.text);
+    setItems([]);
+    setOpen(false);
+    setActive(-1);
+    token.current = undefined; // a Google session ends with a selection
+  }
+
+  const listId = `${id}-list`;
+  const show = open && items.length > 0;
+  return (
+    <div className="relative grid gap-1.5 text-sm font-medium">
+      <label htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        className={field}
+        value={value}
+        autoComplete="off"
+        role="combobox"
+        aria-expanded={show}
+        aria-controls={listId}
+        aria-autocomplete="list"
+        aria-activedescendant={show && active >= 0 ? `${listId}-${active}` : undefined}
+        onChange={(e) => {
+          onType(e.target.value);
+          setOpen(true);
+          setActive(-1);
+          search(e.target.value);
+        }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        onKeyDown={(e) => {
+          if (!show) return;
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setActive((a) => (a + 1) % items.length);
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setActive((a) => (a <= 0 ? items.length - 1 : a - 1));
+          } else if (e.key === "Enter" && active >= 0) {
+            e.preventDefault();
+            pick(items[active]);
+          } else if (e.key === "Escape") {
+            setOpen(false);
+          }
+        }}
+      />
+      {show && (
+        <ul
+          id={listId}
+          role="listbox"
+          className="absolute top-full right-0 left-0 z-30 mt-1 overflow-hidden rounded-card border border-line bg-bg font-normal shadow-xl"
+        >
+          {items.map((sug, i) => (
+            <li
+              key={sug.text}
+              id={`${listId}-${i}`}
+              role="option"
+              aria-selected={i === active}
+              onMouseDown={(e) => {
+                e.preventDefault(); // keep focus until the click lands
+                pick(sug);
+              }}
+              className={`cursor-pointer px-3.5 py-2.5 ${i === active ? "bg-surface" : "hover:bg-surface"}`}
+            >
+              <span className="block font-medium text-text">{sug.main}</span>
+              {sug.secondary && <span className="block text-xs text-muted">{sug.secondary}</span>}
+            </li>
+          ))}
+          {mapsKey && <li className="px-3.5 py-1 text-right text-[10px] text-muted" aria-hidden="true">Google</li>}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export function FareCalculator({ lang, vehicles, settings, routes, places, defaultPickup = "", mapsKey, near, waNumber }: FareCalculatorProps) {
   const t = T[lang];
   const [round, setRound] = useState(true);
   const [pickup, setPickup] = useState(defaultPickup);
@@ -253,28 +423,41 @@ export function FareCalculator({ lang, vehicles, settings, routes, places, defau
           ))}
         </div>
 
-        <datalist id="fare-places">
-          {places.map((p) => (
-            <option key={p} value={p} />
-          ))}
-        </datalist>
-
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-1.5 text-sm font-medium">
-            {t.pickup}
-            <input className={field} list="fare-places" value={pickup} onChange={(e) => setPickup(e.target.value)} autoComplete="off" />
-          </label>
-          <label className="grid gap-1.5 text-sm font-medium">
-            {t.drop}
-            <input
-              className={field}
-              list="fare-places"
-              value={drop}
-              onChange={(e) => setDrop(e.target.value)}
-              onBlur={() => !km && findDistance()}
-              autoComplete="off"
-            />
-          </label>
+          <PlaceInput
+            label={t.pickup}
+            value={pickup}
+            onType={(v) => {
+              setPickup(v);
+              setKm("");
+              setStatus("");
+            }}
+            onPick={(v) => {
+              setPickup(v);
+              void findDistance(v, drop);
+            }}
+            mapsKey={mapsKey}
+            lang={lang}
+            places={places}
+            near={near}
+          />
+          <PlaceInput
+            label={t.drop}
+            value={drop}
+            onType={(v) => {
+              setDrop(v);
+              setKm("");
+              setStatus("");
+            }}
+            onPick={(v) => {
+              setDrop(v);
+              void findDistance(pickup, v);
+            }}
+            mapsKey={mapsKey}
+            lang={lang}
+            places={places}
+            near={near}
+          />
         </div>
 
         {routes.length > 0 && (

@@ -15,8 +15,10 @@ const schema = baseSection.extend({
   defaultPickup: localized.optional(),
   /** Quick-pick routes (one-way km). */
   routes: z.array(z.object({ from: localized, to: localized, km: z.number().positive() }).strict()).default([]),
-  /** Suggestions while typing pickup / drop. */
+  /** Suggestions while typing pickup / drop (used when there is no Google key, or Google has no match). */
   places: z.array(z.string()).default([]),
+  /** Google address suggestions prefer places near this point, e.g. the business's city. */
+  searchNear: z.object({ lat: z.number(), lng: z.number() }).strict().optional(),
   /** Filled in automatically from the fleet section's vehicles that have a rate. */
   vehicles: z
     .array(z.object({ name: localized, rate: z.number().positive(), seats: z.union([z.number(), z.string()]).optional() }).strict())
@@ -39,6 +41,7 @@ function Calculator({ id, data, ctx }: SectionProps<Data>) {
           places={data.places}
           defaultPickup={ctx.t(data.defaultPickup)}
           mapsKey={mapsKey}
+          near={data.searchNear}
           waNumber={ctx.waNumber}
         />
       </Container>

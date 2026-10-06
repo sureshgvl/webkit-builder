@@ -155,11 +155,15 @@ Set `GOOGLE_MAPS_API_KEY` in the client's **Vercel project → Settings → Envi
 put into the page (the site is static), so in Google Cloud Console → Credentials **restrict it**:
 
 - Application restriction: **Websites** → the client's domain(s) and `*.vercel.app` preview URL
-- API restriction: **Maps JavaScript API** and **Routes API** only
+- API restriction: **Maps JavaScript API**, **Places API (New)** and **Routes API** only
+- Enable those three APIs in **APIs & Services → Library** (Places API (New) gives the address suggestions
+  in Pickup / Drop; Routes gives the km)
 - Billing → budget alert / quotas, so a copied key can't run up a bill
 
-The calculator uses the Routes library and falls back to Directions; if Google fails, the customer can still type the
-km or pick a route. Never commit the key to `site.json`.
+Typing in Pickup / Drop shows Google address suggestions (India only, near `searchNear`); picking both fills the km
+automatically. The calculator uses the Routes library and falls back to Directions. If Google fails (API not enabled,
+quota, network) the site's own `places` list is suggested and the customer can still type the km or pick a route.
+Never commit the key to `site.json`.
 
 ## What every site gets
 

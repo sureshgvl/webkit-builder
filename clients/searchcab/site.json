@@ -213,7 +213,11 @@
         "Tuljapur",
         "Satara",
         "Lonar"
-      ]
+      ],
+      "searchNear": {
+        "lat": 18.5204,
+        "lng": 73.8567
+      }
     },
     "fleet": {
       "layout": "compact",
