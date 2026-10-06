@@ -118,6 +118,24 @@ A client can keep a style but use its own brand colours:
 **Override rules:** each key under `sections.<id>` replaces the preset's value for that key (lists are replaced
 whole), and `null` removes it. Any text can be a plain string (same in every language) or `{ "mr": "…", "en": "…" }`.
 
+## Sites, demos and Vercel projects
+
+**One repo, one Vercel project per site.** Each project sets its own `CLIENT`, so sites never affect each other.
+
+| Vercel project | `CLIENT` | Production branch | Purpose |
+|---|---|---|---|
+| e.g. `travel-designs` | `demo-travel` | `main` | Sales demo for tour / travel agencies (🎨 Customize panel) |
+| e.g. `cab-designs` | `demo-cab` | `main` | Sales demo for cab / taxi businesses: fare calculator, routes, fleet + 🎨 panel |
+| `searchcab` | `searchcab` | `client/searchcab` | Live client site, **locked** to its own branch |
+
+**Locking a live client site:** create a branch `client/<slug>` and set it as the project's production branch
+(Vercel → project → Settings → Environments → Production → Branch Tracking). Pushes to `main` (kit changes, new
+demos) then don't touch that client. To update the client deliberately, merge `main` into its branch and push:
+
+```bash
+git checkout client/searchcab && git merge main && git push
+```
+
 ## Deploy to Vercel
 
 One Vercel project per client, all from this repo:

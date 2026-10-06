@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        client: [demo-travel, demo-travel-elegant, searchcab]
+        client: [demo-travel, demo-travel-elegant, demo-cab, searchcab]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

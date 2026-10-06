@@ -1,0 +1,774 @@
+{
+  "industry": "travel",
+  "style": "warm",
+  "languages": [
+    "mr",
+    "en"
+  ],
+  "business": {
+    "name": {
+      "mr": "सह्याद्री कॅब्स",
+      "en": "Sahyadri Cabs"
+    },
+    "tagline": {
+      "mr": "पुणे टुरिस्ट टॅक्सी सर्व्हिस",
+      "en": "Pune tourist taxi service"
+    },
+    "phone": "+91 98765 43210",
+    "address": {
+      "mr": "पुणे, महाराष्ट्र",
+      "en": "Pune, Maharashtra"
+    },
+    "mapQuery": "Pune, Maharashtra"
+  },
+  "order": [
+    "hero",
+    "fare",
+    "fleet",
+    "routes",
+    "features",
+    "faq",
+    "cta",
+    "contact"
+  ],
+  "sections": {
+    "hero": {
+      "layout": "image",
+      "image": "/placeholders/mountains.svg",
+      "imageFit": "cover",
+      "eyebrow": {
+        "mr": "पुणे टुरिस्ट टॅक्सी सर्व्हिस",
+        "en": "Pune Tourist Taxi Service"
+      },
+      "title": {
+        "mr": "पुण्याहून कुठेही, आरामदायक टॅक्सी",
+        "en": "Comfortable taxis from Pune to anywhere"
+      },
+      "subtitle": {
+        "mr": "एअरपोर्ट ट्रान्सफर, घाट-हिल स्टेशन सहली आणि कोकण-गोवा टूर. भाडे लगेच पहा आणि व्हॉट्सॲपवर बुक करा.",
+        "en": "Airport transfers, hill station trips and Kokan & Goa tours. See your fare instantly and book on WhatsApp."
+      },
+      "badges": [
+        {
+          "mr": "एअरपोर्ट ट्रान्सफर",
+          "en": "Airport transfers"
+        },
+        {
+          "mr": "हिल स्टेशन सहली",
+          "en": "Hill station trips"
+        },
+        {
+          "mr": "कोकण आणि गोवा टूर",
+          "en": "Kokan & Goa tours"
+        }
+      ],
+      "secondaryCta": {
+        "label": {
+          "mr": "भाडे पहा",
+          "en": "Check fare"
+        },
+        "href": "#fare"
+      }
+    },
+    "fare": {
+      "layout": "calculator",
+      "tone": "surface",
+      "navLabel": {
+        "mr": "भाडे",
+        "en": "Fare"
+      },
+      "eyebrow": {
+        "mr": "भाडे कॅल्क्युलेटर",
+        "en": "Fare calculator"
+      },
+      "title": {
+        "mr": "तुमच्या प्रवासाचे भाडे लगेच पहा",
+        "en": "See your trip fare instantly"
+      },
+      "subtitle": {
+        "mr": "ठिकाण, तारीख आणि वाहन निवडा. दररोज किमान 300 km, ड्रायव्हर भत्ता ₹300/दिवस आणि 5% GST. टोल-पार्किंग वेगळे.",
+        "en": "Choose places, dates and vehicle. Minimum 300 km per day, driver allowance ₹300/day and 5% GST. Toll and parking extra."
+      },
+      "defaultPickup": {
+        "mr": "पुणे",
+        "en": "Pune"
+      },
+      "routes": [
+        {
+          "from": {
+            "mr": "पुणे",
+            "en": "Pune"
+          },
+          "to": {
+            "mr": "मुंबई",
+            "en": "Mumbai"
+          },
+          "km": 150
+        },
+        {
+          "from": {
+            "mr": "पुणे",
+            "en": "Pune"
+          },
+          "to": {
+            "mr": "मुंबई एअरपोर्ट",
+            "en": "Mumbai Airport"
+          },
+          "km": 160
+        },
+        {
+          "from": {
+            "mr": "पुणे",
+            "en": "Pune"
+          },
+          "to": {
+            "mr": "लोणावळा",
+            "en": "Lonavala"
+          },
+          "km": 65
+        },
+        {
+          "from": {
+            "mr": "पुणे",
+            "en": "Pune"
+          },
+          "to": {
+            "mr": "महाबळेश्वर",
+            "en": "Mahabaleshwar"
+          },
+          "km": 120
+        },
+        {
+          "from": {
+            "mr": "पुणे",
+            "en": "Pune"
+          },
+          "to": {
+            "mr": "पाचगणी",
+            "en": "Panchgani"
+          },
+          "km": 100
+        },
+        {
+          "from": {
+            "mr": "पुणे",
+            "en": "Pune"
+          },
+          "to": {
+            "mr": "अलिबाग",
+            "en": "Alibaug"
+          },
+          "km": 145
+        },
+        {
+          "from": {
+            "mr": "पुणे",
+            "en": "Pune"
+          },
+          "to": {
+            "mr": "शिर्डी",
+            "en": "Shirdi"
+          },
+          "km": 185
+        },
+        {
+          "from": {
+            "mr": "पुणे",
+            "en": "Pune"
+          },
+          "to": {
+            "mr": "नाशिक",
+            "en": "Nashik"
+          },
+          "km": 210
+        }
+      ],
+      "places": [
+        "Pune",
+        "Pune Airport",
+        "Pune Railway Station",
+        "Mumbai",
+        "Mumbai Airport",
+        "Lonavala",
+        "Mahabaleshwar",
+        "Panchgani",
+        "Alibaug",
+        "Shirdi",
+        "Nashik",
+        "Kolhapur",
+        "Aurangabad",
+        "Ganpatipule",
+        "Ratnagiri",
+        "Dapoli",
+        "Tarkarli",
+        "Goa",
+        "Lavasa",
+        "Bhimashankar",
+        "Pandharpur",
+        "Tuljapur",
+        "Satara",
+        "Lonar"
+      ],
+      "searchNear": {
+        "lat": 18.5204,
+        "lng": 73.8567
+      }
+    },
+    "fleet": {
+      "layout": "compact",
+      "items": [
+        {
+          "name": "Maruti WagonR",
+          "image": "images/fleet/maruti-wagonr.webp",
+          "category": {
+            "mr": "हॅचबॅक",
+            "en": "Hatchback"
+          },
+          "seats": "4+1",
+          "rate": 12,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Maruti Dzire",
+          "image": "images/fleet/maruti-dzire.webp",
+          "category": {
+            "mr": "सेडान",
+            "en": "Sedan"
+          },
+          "seats": "4+1",
+          "rate": 13,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Hyundai Aura",
+          "image": "images/fleet/hyundai-aura.webp",
+          "category": {
+            "mr": "सेडान",
+            "en": "Sedan"
+          },
+          "seats": "4+1",
+          "rate": 13,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Maruti Ertiga",
+          "image": "images/fleet/maruti-ertiga.webp",
+          "category": "MUV",
+          "seats": "6+1",
+          "rate": 17,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Mahindra Bolero",
+          "image": "images/fleet/mahindra-bolero.webp",
+          "category": "SUV",
+          "seats": "6+1",
+          "rate": 23,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Mahindra Scorpio",
+          "image": "images/fleet/scorpio-n.webp",
+          "category": "SUV",
+          "seats": "6+1",
+          "rate": 23,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Toyota Innova Crysta",
+          "image": "images/fleet/innova-crysta.webp",
+          "category": {
+            "mr": "प्रीमियम MUV",
+            "en": "Premium MUV"
+          },
+          "seats": "7+1",
+          "rate": 23,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "7-Seater SUV (XUV700)",
+          "image": "images/fleet/mahindra-xuv700.webp",
+          "category": {
+            "mr": "प्रीमियम SUV",
+            "en": "Premium SUV"
+          },
+          "seats": "6+1",
+          "rate": 27,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Toyota Innova Hycross",
+          "image": "images/fleet/innova-hycross.webp",
+          "category": {
+            "mr": "प्रीमियम MUV",
+            "en": "Premium MUV"
+          },
+          "seats": "7+1",
+          "rate": 28,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Tourist Thar",
+          "image": "images/fleet/mahindra-thar.webp",
+          "category": {
+            "mr": "4x4 SUV",
+            "en": "4x4 SUV"
+          },
+          "seats": "3+1",
+          "rate": 33,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": "Force Urbania",
+          "image": "images/fleet/force-urbania.webp",
+          "category": {
+            "mr": "टेम्पो ट्रॅव्हलर",
+            "en": "Tempo Traveller"
+          },
+          "seats": "16+1",
+          "rate": 38,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        },
+        {
+          "name": {
+            "mr": "४०-सीटर बस (Non-AC)",
+            "en": "40-Seater Bus (Non-AC)"
+          },
+          "image": "images/fleet/tata-minibus.webp",
+          "category": {
+            "mr": "बस",
+            "en": "Bus"
+          },
+          "seats": 40,
+          "rate": 24,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "Non-AC",
+              "en": "Non-AC"
+            }
+          ]
+        },
+        {
+          "name": {
+            "mr": "लक्झरी बस",
+            "en": "Luxury Bus"
+          },
+          "image": "images/fleet/volvo-bus.webp",
+          "category": {
+            "mr": "लक्झरी बस",
+            "en": "Luxury bus"
+          },
+          "seats": "45+",
+          "rate": 64,
+          "rateUnit": "km",
+          "features": [
+            {
+              "mr": "AC",
+              "en": "AC"
+            }
+          ]
+        }
+      ],
+      "eyebrow": {
+        "mr": "आमची वाहने",
+        "en": "Our fleet"
+      },
+      "title": {
+        "mr": "प्रत्येक प्रवासासाठी योग्य वाहन",
+        "en": "The right vehicle for every trip"
+      },
+      "subtitle": {
+        "mr": "हॅचबॅकपासून लक्झरी बसपर्यंत. दर प्रति km, अनुभवी ड्रायव्हरसह.",
+        "en": "From hatchbacks to luxury buses. Rates per km, with experienced drivers."
+      }
+    },
+    "routes": {
+      "layout": "grid",
+      "navLabel": {
+        "mr": "Routes",
+        "en": "Routes"
+      },
+      "eyebrow": {
+        "mr": "लोकप्रिय routes",
+        "en": "Popular routes"
+      },
+      "title": {
+        "mr": "पुण्याहून लोकप्रिय प्रवास",
+        "en": "Popular trips from Pune"
+      },
+      "from": {
+        "mr": "पुणे",
+        "en": "Pune"
+      },
+      "items": [
+        {
+          "to": {
+            "mr": "मुंबई",
+            "en": "Mumbai"
+          },
+          "km": 150,
+          "days": 1,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "मुंबई एअरपोर्ट",
+            "en": "Mumbai Airport"
+          },
+          "km": 160,
+          "days": 1,
+          "trip": "oneway"
+        },
+        {
+          "to": {
+            "mr": "लोणावळा",
+            "en": "Lonavala"
+          },
+          "km": 65,
+          "days": 1,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "महाबळेश्वर",
+            "en": "Mahabaleshwar"
+          },
+          "km": 120,
+          "days": 2,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "पाचगणी",
+            "en": "Panchgani"
+          },
+          "km": 100,
+          "days": 2,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "अलिबाग",
+            "en": "Alibaug"
+          },
+          "km": 145,
+          "days": 2,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "शिर्डी",
+            "en": "Shirdi"
+          },
+          "km": 185,
+          "days": 1,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "नाशिक",
+            "en": "Nashik"
+          },
+          "km": 210,
+          "days": 1,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "कोल्हापूर",
+            "en": "Kolhapur"
+          },
+          "km": 230,
+          "days": 2,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "छ. संभाजीनगर (औरंगाबाद)",
+            "en": "Aurangabad"
+          },
+          "km": 235,
+          "days": 2,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "गणपतीपुळे",
+            "en": "Ganpatipule"
+          },
+          "km": 320,
+          "days": 2,
+          "trip": "round"
+        },
+        {
+          "to": {
+            "mr": "गोवा",
+            "en": "Goa"
+          },
+          "km": 450,
+          "days": 3,
+          "trip": "round"
+        }
+      ],
+      "vehicle": "Dzire"
+    },
+    "features": {
+      "layout": "grid",
+      "tone": "surface",
+      "navLabel": {
+        "mr": "सेवा",
+        "en": "Services"
+      },
+      "eyebrow": {
+        "mr": "आमच्या सेवा",
+        "en": "Our services"
+      },
+      "title": {
+        "mr": "Sahyadri Cabs का निवडावे?",
+        "en": "Why Sahyadri Cabs?"
+      },
+      "items": [
+        {
+          "icon": "plane",
+          "title": {
+            "mr": "एअरपोर्ट ट्रान्सफर",
+            "en": "Airport transfers"
+          },
+          "text": {
+            "mr": "पुणे आणि मुंबई एअरपोर्टसाठी वेळेवर pickup आणि drop.",
+            "en": "On-time pickup and drop for Pune and Mumbai airports."
+          }
+        },
+        {
+          "icon": "mountain",
+          "title": {
+            "mr": "हिल स्टेशन सहली",
+            "en": "Hill station trips"
+          },
+          "text": {
+            "mr": "महाबळेश्वर, लोणावळा, पाचगणी – घाट रस्त्यांचा अनुभव असलेले ड्रायव्हर.",
+            "en": "Mahabaleshwar, Lonavala, Panchgani – drivers experienced on ghat roads."
+          }
+        },
+        {
+          "icon": "sun",
+          "title": {
+            "mr": "कोकण आणि गोवा टूर",
+            "en": "Kokan & Goa tours"
+          },
+          "text": {
+            "mr": "गणपतीपुळे, अलिबाग, तारकर्ली ते गोवा – कुटुंब आणि ग्रुपसाठी.",
+            "en": "Ganpatipule, Alibaug, Tarkarli to Goa – for families and groups."
+          }
+        },
+        {
+          "icon": "landmark",
+          "title": {
+            "mr": "देवदर्शन",
+            "en": "Pilgrimages"
+          },
+          "text": {
+            "mr": "शिर्डी, पंढरपूर, तुळजापूर, अष्टविनायक आणि इतर.",
+            "en": "Shirdi, Pandharpur, Tuljapur, Ashtavinayak and more."
+          }
+        },
+        {
+          "icon": "wallet",
+          "title": {
+            "mr": "स्पष्ट भाडे",
+            "en": "Clear pricing"
+          },
+          "text": {
+            "mr": "प्रवासाआधीच संपूर्ण भाडे – किमान km, भत्ता आणि GST सह.",
+            "en": "Full fare before you travel – minimum km, allowance and GST shown."
+          }
+        },
+        {
+          "icon": "users",
+          "title": {
+            "mr": "सर्व आकाराची वाहने",
+            "en": "Every group size"
+          },
+          "text": {
+            "mr": "4 प्रवाशांपासून 45+ च्या ग्रुपपर्यंत – कार, टेम्पो ट्रॅव्हलर, बस.",
+            "en": "From 4 passengers to groups of 45+ – cars, tempo travellers, buses."
+          }
+        }
+      ]
+    },
+    "faq": {
+      "layout": "accordion",
+      "navLabel": {
+        "mr": "प्रश्न",
+        "en": "FAQ"
+      },
+      "eyebrow": {
+        "mr": "शंका आहे?",
+        "en": "Questions?"
+      },
+      "title": {
+        "mr": "भाड्याबद्दल नेहमीचे प्रश्न",
+        "en": "Common questions about fares"
+      },
+      "items": [
+        {
+          "q": {
+            "mr": "किमान 300 km म्हणजे काय?",
+            "en": "What does the 300 km minimum mean?"
+          },
+          "a": {
+            "mr": "प्रत्येक दिवसासाठी किमान 300 km आकारले जातात. प्रत्यक्ष अंतर जास्त असल्यास प्रत्यक्ष km आकारले जातात. उदा. 2 दिवसांच्या सहलीला किमान 600 km.",
+            "en": "At least 300 km is charged per day. If the actual distance is more, the actual km is charged. Example: a 2-day trip is charged at least 600 km."
+          }
+        },
+        {
+          "q": {
+            "mr": "भाड्यात काय समाविष्ट आहे?",
+            "en": "What is included in the fare?"
+          },
+          "a": {
+            "mr": "वाहनाचे km भाडे, ड्रायव्हर भत्ता (₹300 प्रति दिवस) आणि 5% GST.",
+            "en": "The per-km fare, driver allowance (₹300 per day) and 5% GST."
+          }
+        },
+        {
+          "q": {
+            "mr": "टोल आणि पार्किंग?",
+            "en": "What about toll and parking?"
+          },
+          "a": {
+            "mr": "टोल, पार्किंग आणि राज्य परमिट भाड्यात नाहीत; ते प्रत्यक्ष खर्चाप्रमाणे वेगळे द्यावे लागतात.",
+            "en": "Toll, parking and state permit are not in the fare; they are paid extra, as actual."
+          }
+        },
+        {
+          "q": {
+            "mr": "One way प्रवासालाही किमान km लागतात का?",
+            "en": "Does the minimum apply to one-way trips?"
+          },
+          "a": {
+            "mr": "हो. One way, round trip आणि शहरातील प्रवास – सर्वांना दररोज किमान 300 km लागू.",
+            "en": "Yes. One-way, round trips and local trips all have the 300 km per day minimum."
+          }
+        },
+        {
+          "q": {
+            "mr": "बुकिंग कसे करायचे?",
+            "en": "How do I book?"
+          },
+          "a": {
+            "mr": "भाडे कॅल्क्युलेटरमध्ये माहिती भरा आणि 'व्हॉट्सॲपवर बुक करा' दाबा, किंवा आम्हाला थेट कॉल करा.",
+            "en": "Fill in the fare calculator and tap 'Book on WhatsApp', or call us directly."
+          }
+        }
+      ]
+    },
+    "cta": {
+      "layout": "strip",
+      "title": {
+        "mr": "आजच तुमची टॅक्सी बुक करा",
+        "en": "Book your taxi today"
+      },
+      "subtitle": {
+        "mr": "व्हॉट्सॲप करा किंवा कॉल करा – आम्ही लगेच उत्तर देतो.",
+        "en": "Message us on WhatsApp or call – we reply quickly."
+      }
+    },
+    "contact": {
+      "layout": "details",
+      "navLabel": {
+        "mr": "संपर्क",
+        "en": "Contact"
+      },
+      "eyebrow": {
+        "mr": "संपर्क",
+        "en": "Contact"
+      },
+      "title": {
+        "mr": "Sahyadri Cabs, पुणे",
+        "en": "Sahyadri Cabs, Pune"
+      }
+    },
+    "footer": {
+      "layout": "columns"
+    }
+  },
+  "seo": {
+    "title": {
+      "mr": "सह्याद्री कॅब्स – डेमो",
+      "en": "Sahyadri Cabs – Demo"
+    },
+    "description": {
+      "mr": "कॅब/टॅक्सी वेबसाइट डेमो",
+      "en": "Cab / taxi website demo"
+    }
+  },
+  "showcase": true
+}
