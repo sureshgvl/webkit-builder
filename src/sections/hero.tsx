@@ -11,6 +11,8 @@ const schema = baseSection.extend({
   title: localized,
   subtitle: localized.optional(),
   image: imageRef.optional(),
+  /** "contain" shows the whole image (logos, cut-out vehicles) instead of filling the box. */
+  imageFit: z.enum(["cover", "contain"]).default("cover"),
   /** Short trust points shown under the buttons, e.g. "5000+ happy travellers". */
   badges: z.array(localized).optional(),
   /** Defaults to "Enquire on WhatsApp". */
@@ -68,7 +70,7 @@ function Split({ id, data, ctx }: SectionProps<Data>) {
           src={ctx.img(data.image)}
           alt=""
           eager
-          className="aspect-[4/3] w-full rounded-card object-cover shadow-xl"
+          className={`aspect-[4/3] w-full ${data.imageFit === "contain" ? "object-contain" : "rounded-card object-cover shadow-xl"}`}
         />
       </Container>
     </section>
@@ -91,7 +93,7 @@ function Centered({ id, data, ctx }: SectionProps<Data>) {
             src={ctx.img(data.image)}
             alt=""
             eager
-            className="mt-12 aspect-[21/9] w-full rounded-card object-cover shadow-xl"
+            className={`mt-12 aspect-[21/9] w-full ${data.imageFit === "contain" ? "object-contain" : "rounded-card object-cover shadow-xl"}`}
           />
         )}
       </Container>

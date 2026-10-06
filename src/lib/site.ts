@@ -111,6 +111,40 @@ export function parseSite(slug: string, raw: unknown, file = `clients/${slug}/si
 
   const sections = order.map((id) => resolveSection(file, id, undefined, preset.sections[id], client[id]));
 
+  // The fare calculator uses the fleet's vehicles that have a rate; route prices use the cheapest one.
+  const fleetSection = sections.find((x) => x.type === "fleet");
+  const fareSection = sections.find((x) => x.type === "fare");
+  const fleetRated = ((fleetSection?.data.items ?? []) as { name: unknown; rate?: number; seatsLabel?: string; seats?: unknown }[])
+    .filter((v) => typeof v.rate === "number")
+    .map((v) => ({ name: v.name, rate: v.rate!, ...(v.seats !== undefined ? { seats: v.seats } : {}) }));
+  if (fareSection) {
+    if (!fareSection.data.vehicles) fareSection.data.vehicles = fleetRated;
+    if (!(fareSection.data.vehicles as unknown[]).length) {
+      fail(file, `Section "${fareSection.id}" has no vehicles: add "rate" to the fleet section's vehicles, or list "vehicles" in the fare section.`);
+    }
+  }
+  const routesSection = sections.find((x) => x.type === "routes");
+  if (routesSection && !routesSection.data.pricing) {
+    const vehicles = (fareSection?.data.vehicles as typeof fleetRated | undefined) ?? fleetRated;
+    const wanted = (routesSection.data.vehicle as string | undefined)?.toLowerCase();
+    const named = wanted
+      ? vehicles.find((v) => JSON.stringify(v.name).toLowerCase().includes(wanted))
+      : undefined;
+    if (wanted && !named) fail(file, `Section "${routesSection.id}": no fleet vehicle matches "${routesSection.data.vehicle}".`);
+    const cheapest = named ?? [...vehicles].sort((a, b) => a.rate - b.rate)[0];
+    const f = fareSection?.data as { minKmPerDay?: number; driverAllowancePerDay?: number; gstPercent?: number; gstMode?: string } | undefined;
+    if (cheapest) {
+      routesSection.data.pricing = {
+        minKmPerDay: f?.minKmPerDay ?? 300,
+        driverAllowancePerDay: f?.driverAllowancePerDay ?? 300,
+        gstPercent: f?.gstPercent ?? 5,
+        gstMode: f?.gstMode ?? "add",
+        rate: cheapest.rate,
+        vehicleName: cheapest.name,
+      };
+    }
+  }
+
   // The enquiry form offers the package names from the packages section.
   const pkgs = sections.find((s) => s.type === "packages");
   const enquiry = sections.find((s) => s.type === "enquiry");

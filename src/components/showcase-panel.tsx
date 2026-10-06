@@ -59,6 +59,8 @@ const SECTION_NAMES: Record<string, Record<Lang, string>> = {
   about: { en: "About", mr: "आमच्याबद्दल" },
   packages: { en: "Packages", mr: "पॅकेज" },
   fleet: { en: "Vehicles", mr: "वाहने" },
+  fare: { en: "Fare calculator", mr: "भाडे कॅल्क्युलेटर" },
+  routes: { en: "Popular routes", mr: "लोकप्रिय routes" },
   features: { en: "Why us", mr: "आम्हालाच का" },
   stats: { en: "Numbers", mr: "आकडे" },
   gallery: { en: "Gallery", mr: "गॅलरी" },
@@ -89,6 +91,7 @@ const LAYOUT_NAMES: Record<string, Record<Lang, string>> = {
   details: { en: "Details", mr: "फक्त माहिती" },
   columns: { en: "Columns", mr: "कॉलम" },
   compact: { en: "Compact", mr: "छोटे कार्ड" },
+  calculator: { en: "Calculator", mr: "कॅल्क्युलेटर" },
 };
 
 /** White or near-black text, whichever reads better on `hex`. */

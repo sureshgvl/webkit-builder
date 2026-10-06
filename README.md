@@ -62,6 +62,8 @@ The first layout is the default.
 | `cta` | `card`, `strip` | WhatsApp + call buttons |
 | `enquiry` | `split`, `simple` | WhatsApp form; package list comes from `packages` automatically |
 | `contact` | `map`, `details` | Uses `business.mapQuery` or the address |
+| `fare` | `calculator` | Cab fare calculator in the browser: `MAX(km, minKmPerDay × days)` × rate + driver allowance + GST; quick-pick routes, "Book on WhatsApp" with the quote. Vehicles come from the fleet's `rate`s. Road distance from Google Maps when `GOOGLE_MAPS_API_KEY` is set (see below), otherwise typed / picked |
+| `routes` | `grid` | Popular routes with a price per route (`trip`: round/oneway, `days`), using the fare rules and `vehicle` (default: cheapest) |
 | `footer` | `columns`, `simple` | |
 
 Every section also accepts `tone` (`default`, `surface`, `primary`) and `navLabel`.
@@ -80,7 +82,7 @@ A client can keep a style but use its own brand colours:
 
 | Industry | Default style | Sections |
 |---|---|---|
-| `travel` | `warm` | hero, packages, fleet, features, stats, gallery, testimonials, faq, cta, enquiry, contact — 6 ready looks |
+| `travel` | `warm` | hero, packages, fleet, features, stats, gallery, testimonials, faq, cta, enquiry, contact — 6 ready looks. Cab businesses add `fare` + `routes` (see `clients/searchcab`) |
 
 ## Client config reference
 
@@ -146,6 +148,18 @@ Live demo: https://webkit-builder.vercel.app
 
 To add looks for an industry, edit `looks` in its preset (`src/presets/<industry>.ts`). The build checks that every
 look uses a real style and real layouts.
+
+## Google Maps distance (fare calculator)
+
+Set `GOOGLE_MAPS_API_KEY` in the client's **Vercel project → Settings → Environment Variables**, then redeploy. The key is
+put into the page (the site is static), so in Google Cloud Console → Credentials **restrict it**:
+
+- Application restriction: **Websites** → the client's domain(s) and `*.vercel.app` preview URL
+- API restriction: **Maps JavaScript API** and **Routes API** only
+- Billing → budget alert / quotas, so a copied key can't run up a bill
+
+The calculator uses the Routes library and falls back to Directions; if Google fails, the customer can still type the
+km or pick a route. Never commit the key to `site.json`.
 
 ## What every site gets
 
